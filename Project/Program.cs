@@ -1,10 +1,11 @@
 ﻿  using System; 
+  using Spectre.Console;
     class Program
    {
     static void Main(string[] args) 
     { 
      
-        Lab laberinto = new Lab();
+        Laberinto laberinto = new Laberinto(35, 43);
         laberinto.MostrarLaberinto();
 
     } 

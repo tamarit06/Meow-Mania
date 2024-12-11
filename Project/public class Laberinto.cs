@@ -1,31 +1,36 @@
+using Spectre.Console;
+using System;
+using System.Collections.Generic;
+
 public class Laberinto
 {
-    int[,] tablero;
-    static int sizeX=35;
-    static int sizeY=53;
-    Random rand = new Random();
+    private int[,] tablero;
+    public int sizeX { get; set; }
+    public int sizeY { get; set; }
+    private Random rand = new Random();
 
-    
-    public Lab()
+    public Laberinto(int sizeX, int sizeY)
     {
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
         InicializarTablero();
         GenerarLaberintoConPrim();
     }
-    void InicializarTablero()
-    {   tablero = new int[sizeX,sizeY];
+
+    private void InicializarTablero()
+    {
+        tablero = new int[sizeX, sizeY];
         for (int i = 0; i < sizeX; i++)
         {
             for (int j = 0; j < sizeY; j++)
             {
-                tablero[i, j] = 1;  
+                tablero[i, j] = 1;  // 1 representa pared, 0 camino
             }
         }
     }
 
-   
-    void GenerarLaberintoConPrim()
+    private void GenerarLaberintoConPrim()
     {
-        
         List<(int, int)> celdasAbiertas = new List<(int, int)>();
         int[] dx = { -1, 1, 0, 0 };  
         int[] dy = { 0, 0, -1, 1 };
@@ -54,31 +59,38 @@ public class Laberinto
                 tablero[(x + nx) / 2, (y + ny) / 2] = 0; 
                 celdasAbiertas.Add((nx, ny));
             }
-
             else
             {
                 celdasAbiertas.Remove((x, y));
             }
-
         }
-             
     }
 
-    public void MostrarLaberinto()
-    {
+   public void MostrarLaberinto()
+   {//poner la ficha 
         for (int i = 0; i < sizeX; i++)
         {
             for (int j = 0; j < sizeY; j++)
             {
-               if(tablero[i,j]==0) Console.Write(" ");
-               else Console.Write("█");
+                if (tablero[i, j] == 0)
+                {
+                    // Imprimir espacio vacío
+                    AnsiConsole.Markup("[green] [/]");
+                }
+                else
+                {
+                    // Imprimir bloque del laberinto en verde
+                    AnsiConsole.Markup("[green]█[/]");
+                }
             }
-            Console.WriteLine("");
+            AnsiConsole.WriteLine(""); 
         }
-    }
+   }
 
-    bool EsValido(int x, int y)
+    public bool EsValido(int x, int y)
     {
         return x >= 0 && x < sizeX && y >= 0 && y < sizeY;
     }
+
+    public int[,] Tablero => tablero;
 }
