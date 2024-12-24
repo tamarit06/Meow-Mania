@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Laberinto
 {
-    private int[,] tablero;
+    public Celda[,] tablero;
     public int sizeX { get; set; }
     public int sizeY { get; set; }
     private Random rand = new Random();
@@ -19,12 +19,12 @@ public class Laberinto
 
     private void InicializarTablero()
     {
-        tablero = new int[sizeX, sizeY];
+        tablero = new Celda[sizeX, sizeY];
         for (int i = 0; i < sizeX; i++)
         {
             for (int j = 0; j < sizeY; j++)
             {
-                tablero[i, j] = 1;  // 1 representa pared, 0 camino
+                tablero[i, j] = new Celda();
             }
         }
     }
@@ -36,7 +36,7 @@ public class Laberinto
         int[] dy = { 0, 0, -1, 1 };
 
         int inicioX = 1, inicioY = 1;
-        tablero[inicioX, inicioY] = 0; 
+        tablero[inicioX, inicioY].ConvertirEnCamino(); 
         celdasAbiertas.Add((inicioX, inicioY));
 
         while (celdasAbiertas.Count > 0)
@@ -47,7 +47,7 @@ public class Laberinto
             {
                 int nuevoX = x + dx[i] * 2;
                 int nuevoY = y + dy[i] * 2;
-                if (EsValido(nuevoX, nuevoY) && tablero[nuevoX, nuevoY] == 1)
+                if (EsValido(nuevoX, nuevoY) && tablero[nuevoX, nuevoY].Tipo==Celda.TipoCelda.Pared)
                 {
                     celdasAdyacentes.Add((nuevoX, nuevoY));
                 }
@@ -55,8 +55,8 @@ public class Laberinto
             if (celdasAdyacentes.Count > 0)
             {
                 var (nx, ny) = celdasAdyacentes[rand.Next(celdasAdyacentes.Count)];
-                tablero[nx, ny] = 0;
-                tablero[(x + nx) / 2, (y + ny) / 2] = 0; 
+                tablero[nx, ny].ConvertirEnCamino();
+                tablero[(x + nx) / 2, (y + ny) / 2].ConvertirEnCamino(); 
                 celdasAbiertas.Add((nx, ny));
             }
             else
@@ -67,12 +67,12 @@ public class Laberinto
     }
 
    public void MostrarLaberinto()
-   {//poner la ficha 
+   { 
         for (int i = 0; i < sizeX; i++)
         {
             for (int j = 0; j < sizeY; j++)
             {
-                if (tablero[i, j] == 0)
+                if (tablero[i, j].Tipo==Celda.TipoCelda.Camino)
                 {
                     // Imprimir espacio vacío
                     AnsiConsole.Markup("[green] [/]");
@@ -92,5 +92,5 @@ public class Laberinto
         return x >= 0 && x < sizeX && y >= 0 && y < sizeY;
     }
 
-    public int[,] Tablero => tablero;
+    public Celda[,] Tablero => tablero;
 }

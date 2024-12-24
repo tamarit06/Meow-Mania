@@ -60,7 +60,7 @@ public class Fichas
     {
         return x >= 0 && x < laberinto.sizeX-1 && 
                y >= 0 && y < laberinto.sizeY-1 &&
-               laberinto.Tablero[x,y] != 1;
+               laberinto.Tablero[x,y].Tipo!=Celda.TipoCelda.Pared;
     }
     public override string ToString()
     {
