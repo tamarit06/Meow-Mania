@@ -15,6 +15,7 @@ public class Laberinto
         this.sizeY = sizeY;
         InicializarTablero();
         GenerarLaberintoConPrim();
+        AgregarTrampas(7);
     }
 
     private void InicializarTablero()
@@ -66,6 +67,47 @@ public class Laberinto
         }
     }
 
+    private void AgregarTrampas(int cantidad)
+{
+    List<(int x, int y)> posicionesCamino = new List<(int x, int y)>();
+
+    // Recopilar todas las posiciones de camino
+    for (int i = 0; i < sizeX; i++)
+    {
+        for (int j = 0; j < sizeY; j++)
+        {
+            if (tablero[i, j].Tipo == Celda.TipoCelda.Camino)
+            {
+                posicionesCamino.Add((i, j));
+            }
+        }
+    }
+
+    // Seleccionar aleatoriamente posiciones para las trampas
+    for (int i = 0; i <=cantidad; i++)
+    {
+        var posicionTrampa = posicionesCamino[rand.Next(posicionesCamino.Count)];
+
+        // Seleccionar un tipo de trampa aleatorio
+        int tipoTrampa = rand.Next(1, 4); // Valores entre 1 y 3
+        switch (tipoTrampa)
+        {
+            case 1:
+                tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaDevolver(5)); // Devolver 5 celdas
+                break;
+            case 2:
+                tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaQuitarTurno());
+                break;
+            case 3:
+                tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaAnularHabilidad());
+                break; 
+        }
+
+        posicionesCamino.Remove(posicionTrampa); // Eliminar la posición para no repetir
+    }
+}
+
+
    public void MostrarLaberinto()
    { 
         for (int i = 0; i < sizeX; i++)
@@ -77,11 +119,28 @@ public class Laberinto
                     // Imprimir espacio vacío
                     AnsiConsole.Markup("[green] [/]");
                 }
-                else
+                
+                else if (tablero[i,j].Tipo==Celda.TipoCelda.Pared)
                 {
                     // Imprimir bloque del laberinto en verde
                     AnsiConsole.Markup("[green]█[/]");
                 }
+                
+                else if (tablero[i, j].Tipo == Celda.TipoCelda.Trampa)
+                { 
+                    if (tablero[i, j].TrampaAsociada is TrampaDevolver)
+                    {
+                        AnsiConsole.Markup("[red]D[/]"); 
+                    }
+                    else if (tablero[i, j].TrampaAsociada is TrampaAnularHabilidad)
+                    {
+                        AnsiConsole.Markup("[red]A[/]"); // A para Anular Habilidad
+                    }
+                    else if (tablero[i, j].TrampaAsociada is TrampaQuitarTurno)
+                    {
+                        AnsiConsole.Markup("[red]Q[/]"); // T para Quitar Turno
+                    }
+            }
             }
             AnsiConsole.WriteLine(""); 
         }

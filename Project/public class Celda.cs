@@ -9,30 +9,35 @@ public class Celda
     }
 
     public TipoCelda Tipo { get; set; }
+    public Trampa TrampaAsociada {get; set; }
 
     public Celda()
     {
-        Tipo = TipoCelda.Pared;
-         
+        Tipo = TipoCelda.Pared; 
+        TrampaAsociada= null;
     }
 
     public void ConvertirEnCamino()
     {
         Tipo = TipoCelda.Camino;
+        TrampaAsociada= null;
     }
 
     public void ConvertirEnPared()
     {
         Tipo = TipoCelda.Pared;
+        TrampaAsociada=null;
     }
 
-    public void ConvertirEnTrampa()
+    public void ConvertirEnTrampa(Trampa trampa)
     {
         Tipo = TipoCelda.Trampa;
+        TrampaAsociada=trampa;
     }
 
-    public void ConvertirEnObstaculo()
+    public void AsignarTrampa(Trampa trampa)
     {
-        Tipo = TipoCelda.Obstaculo;
+        Tipo=TipoCelda.Trampa;
+        TrampaAsociada=trampa;
     }
 }
