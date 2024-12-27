@@ -10,7 +10,7 @@ public class Juego
         jugadores=new List<Jugador>();
         int[] PosicionesX={1,19};
         int[] PosicionesY={1,19};
-        Laberinto laberinto = new Laberinto(21, 21);
+        laberinto = new Laberinto(21, 21);
        fichas = new List<Fichas>
         {
             new Fichas("Ficha 1", "volar",10, 23 ),
@@ -30,7 +30,7 @@ public class Juego
             jugadores.Add(jugador);
         }
 
-        laberinto.MostrarLaberinto();
+       
     }
     
         public Fichas ElegirFicha(Jugador jugador)
@@ -57,14 +57,16 @@ public class Juego
     }
 
      public void Jugar()
-    {
+    {int i=0;
         while (true)
-        {
-            foreach (var jugador in jugadores)
-            {
-                JugarTurno(jugador);
-                //ver siha ganado o no
-            }
+        {   
+            
+            laberinto.MostrarLaberinto();
+            JugarTurno(jugadores[i%2]);
+            Console.Clear();
+            i++;
+            //ver siha ganado o no
+            
         }
     }
 
@@ -100,17 +102,47 @@ public class Juego
         }
 
         if (EsMovimientoValido(newPositionX, newPositionY))
-        {
+        {   
+            laberinto.tablero[jugador.PositionX,jugador.PositionY].HayJugador = false;
+            laberinto.tablero[jugador.PositionX,jugador.PositionY].jugador = null;
+
             jugador.PositionX=newPositionX;
             jugador.PositionY=newPositionY;
+
+            laberinto.tablero[jugador.PositionX,jugador.PositionY].HayJugador = true;
+            laberinto.tablero[jugador.PositionX,jugador.PositionY].jugador = jugador;
         }
+        else JugarTurno(jugador);
+
+        
 
     }
-
-        public bool EsMovimientoValido(int x, int y)
+    
+       public bool EsMovimientoValido(int x, int y)
+{
+    // Validar que el laberinto y el tablero estén inicializados
+    if (laberinto == null || laberinto.Tablero == null)
     {
-        return x >= 0 && x < laberinto.sizeX-1 && 
-               y >= 0 && y < laberinto.sizeY-1 &&
-               laberinto.Tablero[x,y].Tipo!=Celda.TipoCelda.Camino;
+        Console.WriteLine("Error: El laberinto no está inicializado correctamente.");
+        return false;
     }
+
+    // Validar que las coordenadas estén dentro de los límites del tablero
+    if (x < 0 || x >= laberinto.sizeX || y < 0 || y >= laberinto.sizeY)
+    {
+        Console.WriteLine($"Error: Movimiento fuera de los límites del laberinto. Coordenadas: ({x}, {y})");
+        return false;
+    }
+
+    // Validar que la celda no sea una pared
+    if (laberinto.Tablero[x, y].Tipo == Celda.TipoCelda.Pared)
+    {
+        Console.WriteLine("Error: Movimiento inválido. La celda es una pared.");
+        return false;
+    }
+
+    // Si pasa todas las validaciones, el movimiento es válido
+    return true;
 }
+
+    }

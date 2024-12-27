@@ -6,6 +6,7 @@
     { 
      
         Juego juego=new Juego();
+        juego.Jugar();
 
     } 
 
