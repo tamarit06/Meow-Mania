@@ -3,15 +3,23 @@ using Spectre.Console;
 
 public class Jugador
 {
-    private int posicionX;
-    private int posicionY;
+    public string Nombre { get; set; }
+    public Fichas FichaElegida { get; set; }
+    public int PositionX;
+    public int PositionY;
     private Laberinto laberinto;
+    public int representacionEnConsola { get; set; }
     
-    public Jugador(int posicionX, int posicionY, Laberinto laberinto)
+    public Jugador(string Nombre, int representacionEnConsola, int PositionX, int PositionY, Laberinto laberinto)
     {
-        this.posicionX=posicionX;
-        this.posicionY=posicionY;
+        this.Nombre=Nombre;
+        this.representacionEnConsola=representacionEnConsola;
+        this.PositionX=PositionX;
+        this.PositionY=PositionY;
         this.laberinto=laberinto;
+        laberinto.tablero[PositionX,PositionY].HayJugador=true;
+        
+
         
     }
 
@@ -41,4 +49,6 @@ public class Jugador
     }
     return true; //La celda es válida
 }
+
+// definir metodo o propoedad ficha elegida
 }

@@ -5,8 +5,7 @@
     static void Main(string[] args) 
     { 
      
-        Laberinto laberinto = new Laberinto(27, 27);
-        laberinto.MostrarLaberinto();
+        Juego juego=new Juego();
 
     } 
 

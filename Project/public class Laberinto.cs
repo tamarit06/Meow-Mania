@@ -114,7 +114,16 @@ public class Laberinto
         {
             for (int j = 0; j < sizeY; j++)
             {
-                if (tablero[i, j].Tipo==Celda.TipoCelda.Camino)
+                 if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 1 && tablero[i,j].Tipo==Celda.TipoCelda.Camino )
+                {
+                    AnsiConsole.Markup("[blue]♦[/]");
+                }
+                 else if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 2  && tablero[i,j].Tipo==Celda.TipoCelda.Camino )
+                {
+                    AnsiConsole.Markup("[blue]♠[/]");
+                }
+
+               else if (tablero[i, j].Tipo==Celda.TipoCelda.Camino)
                 {
                     // Imprimir espacio vacío
                     AnsiConsole.Markup("[green] [/]");
@@ -140,7 +149,9 @@ public class Laberinto
                     {
                         AnsiConsole.Markup("[red]Q[/]"); // T para Quitar Turno
                     }
-            }
+                }
+
+                
             }
             AnsiConsole.WriteLine(""); 
         }

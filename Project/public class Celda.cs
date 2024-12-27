@@ -11,10 +11,14 @@ public class Celda
     public TipoCelda Tipo { get; set; }
     public Trampa TrampaAsociada {get; set; }
 
+    public bool HayJugador;
+    public Jugador jugador { get; set; }
+
     public Celda()
     {
         Tipo = TipoCelda.Pared; 
         TrampaAsociada= null;
+        HayJugador=false;
     }
 
     public void ConvertirEnCamino()
@@ -40,4 +44,6 @@ public class Celda
         Tipo=TipoCelda.Trampa;
         TrampaAsociada=trampa;
     }
+
+    
 }
