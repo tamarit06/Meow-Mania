@@ -102,13 +102,13 @@ public class Laberinto
             switch (tipoTrampa)
             {
                 case 1:
-                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaDevolver(5)); // Devolver 5 celdas
+                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaQuitarPunto()); // Devolver 5 celdas
                     break;
                 case 2:
-                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaQuitarTurno());
+                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaDisminuirVelocidad());
                     break;
                 case 3:
-                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaAnularHabilidad());
+                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaAumentarTiempoDeEnfriamientoo());
                     break; 
             }
 
@@ -135,7 +135,7 @@ public class Laberinto
 
    public void MostrarLaberinto()
    { 
-        
+
         for (int i = 0; i < sizeX; i++)
         {
             for (int j = 0; j < sizeY; j++)
@@ -163,15 +163,15 @@ public class Laberinto
                 
                 else if (tablero[i, j].Tipo == Celda.TipoCelda.Trampa)
                 { 
-                    if (tablero[i, j].TrampaAsociada is TrampaDevolver)
+                    if (tablero[i, j].TrampaAsociada is TrampaQuitarPunto)
                     {
                         AnsiConsole.Markup("[red]❌[/]"); 
                     }
-                    else if (tablero[i, j].TrampaAsociada is TrampaAnularHabilidad)
+                    else if (tablero[i, j].TrampaAsociada is TrampaAumentarTiempoDeEnfriamientoo)
                     {
                         AnsiConsole.Markup("[red]🛑[/]"); // A para Anular Habilidad
                     }
-                    else if (tablero[i, j].TrampaAsociada is TrampaQuitarTurno)
+                    else if (tablero[i, j].TrampaAsociada is TrampaDisminuirVelocidad)
                     {
                         AnsiConsole.Markup("[red]🚫[/]"); // T para Quitar Turno
                     }

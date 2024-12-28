@@ -9,6 +9,7 @@ public class Jugador
     public int PositionY;
     private Laberinto laberinto;
     public int representacionEnConsola { get; set; }
+    public int Puntuacion{get; set;}
     
     public Jugador(string Nombre, int representacionEnConsola, int PositionX, int PositionY, Laberinto laberinto)
     {
@@ -17,22 +18,47 @@ public class Jugador
         this.PositionX=PositionX;
         this.PositionY=PositionY;
         this.laberinto=laberinto;
-        laberinto.tablero[PositionX,PositionY].HayJugador=true;  
+        laberinto.tablero[PositionX,PositionY].HayJugador=true; 
+        Puntuacion=0;
     }
 
-    public void DevolverCeldas(int celdas)
+    public void MostrarCaracteristicasJugadores(List<Jugador> jugadores)
     {
-        //Logica para devolver a la posicion anterior
+    // Crear una tabla para mostrar las características
+    var tabla = new Table();
+    tabla.AddColumn("Jugador");
+    tabla.AddColumn("Puntuación");
+    tabla.AddColumn("Tiempo de Enfriamiento");
+    tabla.AddColumn("Velocidad");
+
+    foreach (var jugador in jugadores)
+    {
+        // Agregar una fila por cada jugador
+        tabla.AddRow(
+            $"[blue]{jugador.Nombre}[/]",
+            $"[yellow]{jugador.Puntuacion}[/]", 
+            $"[green]{jugador.FichaElegida.TiempoEnfriamiento}[/]",
+            $"[red]{jugador.FichaElegida.Velocidad}[/]"  
+        );
+    }
+
+    // Mostrar la tabla en la consola
+    AnsiConsole.Render(tabla);
+    }
+
+    public void QuitarPunto()
+    {
+        Puntuacion--;
 
     }
-    public void AnularHabilidad()
+    public void AumentarTiempoDeEnfriamiento()
     {
-        // Logica para anular habilidades del jugador
+        FichaElegida.TiempoEnfriamiento++;
     }
 
-    public void QuitarTurno()
+    public void DisminuirVelocidad()
     {
-       // Logica para quitar turno al jugador
+       FichaElegida.Velocidad--;
     }
     public bool EsCeldaValida(int celdaX, int celdaY)
 {
@@ -45,7 +71,7 @@ public class Jugador
         return false; //La celda es una pared
     }
     return true; //La celda es válida
-}
+    }
 
 // definir metodo o propoedad ficha elegida
 }

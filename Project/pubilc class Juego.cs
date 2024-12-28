@@ -14,11 +14,11 @@ public class Juego
         laberinto = new Laberinto(21, 21);
        fichas = new List<Fichas>
         {
-            new Fichas("Ficha 1", "jugar dos veces",10, 4 ),
-            new Fichas("Ficha 2", "supervelocidad",10, 3),
-            new Fichas("Ficha 3", "inmune a trampa",10, 2 ),
-            new Fichas("Ficha 4", "",10, 5 ),
-            new Fichas("Ficha 5", "volar",10, 3),
+            new Fichas("Ficha 1", "jugar dos veces",10, 20 ),
+            new Fichas("Ficha 2", "supervelocidad",10, 10),
+            new Fichas("Ficha 3", "inmune a trampa",10, 10),
+            new Fichas("Ficha 4", "",10, 10 ),
+            new Fichas("Ficha 5", "volar",10, 10),
         };
         
         for (int i = 0; i <2; i++)
@@ -31,8 +31,6 @@ public class Juego
             jugadores.Add(jugador);
             Console.Clear();
         }
-
-       //Console.Clear();
     }
     
         public Fichas ElegirFicha(Jugador jugador)
@@ -65,8 +63,9 @@ public class Juego
         {   
             for (int j = 0; j < jugadores[i%2].FichaElegida.Velocidad; j++)
             {
+                jugadores[0].MostrarCaracteristicasJugadores(jugadores);
                 laberinto.MostrarLaberinto();
-                 JugarTurno(jugadores[i%2]);
+                 Movimiento(jugadores[i%2]);
                  Console.Clear();
             }
             i++;
@@ -75,7 +74,7 @@ public class Juego
         }
     }
 
-    public void JugarTurno(Jugador jugador)
+    public void Movimiento(Jugador jugador)
     {
         Console.WriteLine($"{jugador.Nombre}, usa W (arriba), A (izquierda), S (abajo), D (derecha):");
         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
@@ -117,12 +116,17 @@ public class Juego
             laberinto.tablero[jugador.PositionX,jugador.PositionY].HayJugador = true;
             laberinto.tablero[jugador.PositionX,jugador.PositionY].jugador = jugador;
         }
-        else JugarTurno(jugador);
+        else Movimiento(jugador);
 
         if (laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Trampa)
         {
             laberinto.tablero[jugador.PositionX, jugador.PositionY].TrampaAsociada.Activar(jugador);
-            Console.WriteLine("Trampa activada");//ver esto
+        }
+
+        if (laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Pescado)
+        {
+            laberinto.tablero[jugador.PositionX, jugador.PositionY].ConvertirEnCamino();
+            jugador.Puntuacion++;
         }
     }
     

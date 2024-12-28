@@ -3,33 +3,27 @@ public abstract class Trampa
     public abstract void Activar(Jugador jugador);
 }
 
-public class TrampaDevolver : Trampa
+public class TrampaQuitarPunto : Trampa
 {
-    private int celdasDevolver;
-
-    public TrampaDevolver(int celdasDevolver)
-    {
-        this.celdasDevolver = celdasDevolver;
-    }
 
     public override void Activar(Jugador jugador)
     {
-        jugador.DevolverCeldas(celdasDevolver);
+        jugador.QuitarPunto();
     }
 }
 
-public class TrampaAnularHabilidad : Trampa
+public class TrampaAumentarTiempoDeEnfriamientoo : Trampa
 {
     public override void Activar(Jugador jugador)
     {
-        jugador.AnularHabilidad();
+        jugador.AumentarTiempoDeEnfriamiento();
     }
 }
 
-public class TrampaQuitarTurno : Trampa
+public class TrampaDisminuirVelocidad : Trampa
 {
     public override void Activar(Jugador jugador)
     {
-        jugador.QuitarTurno();
+        jugador.DisminuirVelocidad();
     }
 }
