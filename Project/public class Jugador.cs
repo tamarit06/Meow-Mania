@@ -28,8 +28,9 @@ public class Jugador
     var tabla = new Table();
     tabla.AddColumn("Jugador");
     tabla.AddColumn("Puntuación");
-    tabla.AddColumn("Tiempo de Enfriamiento");
+    tabla.AddColumn("Turnos restantes");
     tabla.AddColumn("Velocidad");
+    tabla.AddColumn("Habilidad");
 
     foreach (var jugador in jugadores)
     {
@@ -37,8 +38,9 @@ public class Jugador
         tabla.AddRow(
             $"[blue]{jugador.Nombre}[/]",
             $"[yellow]{jugador.Puntuacion}[/]", 
-            $"[green]{jugador.FichaElegida.TiempoEnfriamiento}[/]",
-            $"[red]{jugador.FichaElegida.Velocidad}[/]"  
+            $"[green]{jugador.FichaElegida.Habilidad.TurnosRestantes}[/]",
+            $"[red]{jugador.FichaElegida.Velocidad}[/]",
+            $"[yellow]{jugador.FichaElegida.Habilidad.Nombre}[/]"    
         );
     }
 
@@ -50,10 +52,6 @@ public class Jugador
     {
         Puntuacion--;
 
-    }
-    public void AumentarTiempoDeEnfriamiento()
-    {
-        FichaElegida.TiempoEnfriamiento++;
     }
 
     public void DisminuirVelocidad()
@@ -72,6 +70,4 @@ public class Jugador
     }
     return true; //La celda es válida
     }
-
-// definir metodo o propoedad ficha elegida
 }

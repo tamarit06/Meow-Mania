@@ -14,11 +14,11 @@ public class Juego
         laberinto = new Laberinto(21, 21);
        fichas = new List<Fichas>
         {
-            new Fichas("Ficha 1", "jugar dos veces",10, 20 ),
-            new Fichas("Ficha 2", "supervelocidad",10, 10),
-            new Fichas("Ficha 3", "inmune a trampa",10, 10),
-            new Fichas("Ficha 4", "",10, 10 ),
-            new Fichas("Ficha 5", "volar",10, 10),
+            new Fichas("Ficha 1", new HabilidadDuplicarPuntos(),10, 20 ),
+            new Fichas("Ficha 2",new HabilidadSuperVelocidad(),10, 10),
+            new Fichas("Ficha 3", new HabilidadTeletransportacion(),1, 20),
+            new Fichas("Ficha 4", new HabilidadTeletransportacion(),1, 20 ),
+            new Fichas("Ficha 5", new HabilidadSuperVelocidad(),10, 10),
         };
         
         for (int i = 0; i <2; i++)
@@ -39,7 +39,7 @@ public class Juego
         Console.WriteLine($"{jugador.Nombre}, elige una ficha:");
         for (int i = 0; i < fichas.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {fichas[i].Nombre} (Habiliad: {fichas[i].Habilidad}) (Velocidad: {fichas[i].Velocidad})  (Tiempo de enfriamiento: {fichas[i].TiempoEnfriamiento})");
+            Console.WriteLine($"{i + 1}. {fichas[i].Nombre} (Habilidad: {fichas[i].Habilidad.Nombre}) (Velocidad: {fichas[i].Velocidad})  (Tiempo de enfriamiento: {fichas[i].Habilidad.TiempoEnfriamiento})");
         }
 
         int seleccion = int.Parse(Console.ReadLine()) - 1;
@@ -68,6 +68,15 @@ public class Juego
                  Movimiento(jugadores[i%2]);
                  Console.Clear();
             }
+            
+             if (jugadores[i%2].FichaElegida.Habilidad is HabilidadSuperVelocidad habilidadSuperVelocidad)
+        {
+            if (habilidadSuperVelocidad.TurnosRestantes ==0)
+            {
+                habilidadSuperVelocidad.RestablecerVelocidad(jugadores[i % 2]);
+            }
+            jugadores[i%2].FichaElegida.ActualizarEnfriamiento();
+        }
             i++;
             //ver siha ganado o no
             
@@ -79,6 +88,12 @@ public class Juego
         Console.WriteLine($"{jugador.Nombre}, usa W (arriba), A (izquierda), S (abajo), D (derecha):");
         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
         Console.WriteLine();
+
+        if (keyInfo.Key == ConsoleKey.H && jugador.FichaElegida.Habilidad.PuedeActivar()) // Activar habilidad
+    {
+        jugador.FichaElegida.Habilidad.Activar(jugador, laberinto);
+        return; //salir del  metodo luego de activar la habilidad
+    }
 
         int newPositionX=jugador.PositionX;
         int newPositionY=jugador.PositionY;
@@ -150,6 +165,12 @@ public class Juego
     if (laberinto.Tablero[x, y].Tipo == Celda.TipoCelda.Pared)
     {
         Console.WriteLine("Error: Movimiento inválido. La celda es una pared.");
+        return false;
+    }
+    // verificar si hay otro jugador
+    if (laberinto.Tablero[x, y].HayJugador)
+    {
+        Console.WriteLine("Error: Movimiento inválido. La celda tiene otro jugador.");
         return false;
     }
 

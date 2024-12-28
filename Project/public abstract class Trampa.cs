@@ -12,11 +12,11 @@ public class TrampaQuitarPunto : Trampa
     }
 }
 
-public class TrampaAumentarTiempoDeEnfriamientoo : Trampa
+public class TrampaAumentarTurnosRestantes : Trampa
 {
     public override void Activar(Jugador jugador)
     {
-        jugador.AumentarTiempoDeEnfriamiento();
+        jugador.FichaElegida.Habilidad.TurnosRestantes++;
     }
 }
 

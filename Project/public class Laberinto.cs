@@ -70,7 +70,7 @@ public class Laberinto
         }
     }
 
-    private List<(int x,int y)> PosicionesCamino()
+    public List<(int x,int y)> PosicionesCamino()
     {
         List<(int x, int y)> posicionesCamino = new List<(int x, int y)>();
 
@@ -108,7 +108,7 @@ public class Laberinto
                     tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaDisminuirVelocidad());
                     break;
                 case 3:
-                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaAumentarTiempoDeEnfriamientoo());
+                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaAumentarTurnosRestantes());
                     break; 
             }
 
@@ -167,7 +167,7 @@ public class Laberinto
                     {
                         AnsiConsole.Markup("[red]❌[/]"); 
                     }
-                    else if (tablero[i, j].TrampaAsociada is TrampaAumentarTiempoDeEnfriamientoo)
+                    else if (tablero[i, j].TrampaAsociada is TrampaAumentarTurnosRestantes)
                     {
                         AnsiConsole.Markup("[red]🛑[/]"); // A para Anular Habilidad
                     }

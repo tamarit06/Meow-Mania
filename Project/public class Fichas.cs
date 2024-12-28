@@ -4,21 +4,24 @@ using System.Linq;
 public class Fichas
 {
     public string Nombre { get; set; }
-    public string Habilidad { get; set; }
-    public int TiempoEnfriamiento { get; set; } // turnos
-    public float Velocidad { get; set; } // cantidad de casillas a caminar
+    public Habilidad Habilidad { get; set; }//tienes q ver esto
+    public int Velocidad { get; set; } // cantidad de casillas a caminar
 
-    public Fichas(string nombre, string habilidad, int tiempoEnfriamiento, float velocidad)
+    public Fichas(string nombre, Habilidad habilidad, int tiempoEnfriamiento, int velocidad)
     {
         Nombre = nombre;
         Habilidad = habilidad;
-        TiempoEnfriamiento = tiempoEnfriamiento;
         Velocidad = velocidad;
     }
 
     
     public override string ToString()
     {
-        return $"Nombre: {Nombre}, Habilidad: {Habilidad}, Tiempo de Enfriamiento: {TiempoEnfriamiento}s, Velocidad: {Velocidad}u/s";
+        return $"Nombre: {Nombre}, Habilidad: {Habilidad.Nombre},Tiempo de Enfriamiento: {Habilidad.TiempoEnfriamiento}s, Velocidad: {Velocidad}u/s";
+    }
+
+     public void ActualizarEnfriamiento()
+    {
+        Habilidad.ActualizarEnfriamiento();
     }
 }
