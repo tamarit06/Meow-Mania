@@ -5,7 +5,7 @@ public class Celda
         Camino,
         Pared,
         Trampa,
-        Obstaculo
+        Pescado
     }
 
     public TipoCelda Tipo { get; set; }
@@ -33,10 +33,10 @@ public class Celda
         TrampaAsociada=null;
     }
 
-    public void ConvertirEnTrampa(Trampa trampa)
+     public void ConvertirEnPescado()
     {
-        Tipo = TipoCelda.Trampa;
-        TrampaAsociada=trampa;
+        Tipo = TipoCelda.Pescado;
+        TrampaAsociada= null;
     }
 
     public void AsignarTrampa(Trampa trampa)

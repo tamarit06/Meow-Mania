@@ -17,10 +17,7 @@ public class Jugador
         this.PositionX=PositionX;
         this.PositionY=PositionY;
         this.laberinto=laberinto;
-        laberinto.tablero[PositionX,PositionY].HayJugador=true;
-        
-
-        
+        laberinto.tablero[PositionX,PositionY].HayJugador=true;  
     }
 
     public void DevolverCeldas(int celdas)

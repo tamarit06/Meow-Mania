@@ -9,13 +9,16 @@ public class Laberinto
     public int sizeY { get; set; }
     private Random rand = new Random();
 
+    
+
     public Laberinto(int sizeX, int sizeY)
     {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         InicializarTablero();
         GenerarLaberintoConPrim();
-        AgregarTrampas(7);
+        AgregarTrampas(8);
+        AgregarPescado(7);
     }
 
     private void InicializarTablero()
@@ -67,88 +70,116 @@ public class Laberinto
         }
     }
 
-    private void AgregarTrampas(int cantidad)
-{
-    List<(int x, int y)> posicionesCamino = new List<(int x, int y)>();
-
-    // Recopilar todas las posiciones de camino
-    for (int i = 0; i < sizeX; i++)
+    private List<(int x,int y)> PosicionesCamino()
     {
-        for (int j = 0; j < sizeY; j++)
-        {
-            if (tablero[i, j].Tipo == Celda.TipoCelda.Camino && i!=1 && j!=1 && i!=19 && j!=19)
-            {
-                posicionesCamino.Add((i, j));
-            }
-        }
-    }
+        List<(int x, int y)> posicionesCamino = new List<(int x, int y)>();
 
-    // Seleccionar aleatoriamente posiciones para las trampas
-    for (int i = 0; i <=cantidad; i++)
-    {
-        var posicionTrampa = posicionesCamino[rand.Next(posicionesCamino.Count)];
-
-        // Seleccionar un tipo de trampa aleatorio
-        int tipoTrampa = rand.Next(1, 4); // Valores entre 1 y 3
-        switch (tipoTrampa)
-        {
-            case 1:
-                tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaDevolver(5)); // Devolver 5 celdas
-                break;
-            case 2:
-                tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaQuitarTurno());
-                break;
-            case 3:
-                tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaAnularHabilidad());
-                break; 
-        }
-
-        posicionesCamino.Remove(posicionTrampa); // Eliminar la posición para no repetir
-    }
-}
-
-
-   public void MostrarLaberinto()
-   { 
         for (int i = 0; i < sizeX; i++)
         {
             for (int j = 0; j < sizeY; j++)
             {
-                 if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 1 && tablero[i,j].Tipo==Celda.TipoCelda.Camino )
+                if (tablero[i, j].Tipo == Celda.TipoCelda.Camino && i!=1 && j!=1 && i!=19 && j!=19)
                 {
-                    AnsiConsole.Markup("[blue]♦[/]");
+                    posicionesCamino.Add((i, j));
                 }
-                 else if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 2  && tablero[i,j].Tipo==Celda.TipoCelda.Camino )
+            }
+        }
+
+        return posicionesCamino;
+    }
+
+    private void AgregarTrampas(int cantidad)
+   {
+
+        List<(int x, int y)> posicionesCamino = PosicionesCamino();
+        // Seleccionar aleatoriamente posiciones para las trampas
+        for (int i = 0; i <=cantidad; i++)
+        {
+            var posicionTrampa = posicionesCamino[rand.Next(posicionesCamino.Count)];
+
+            // Seleccionar un tipo de trampa aleatorio
+            int tipoTrampa = rand.Next(1, 4); // Valores entre 1 y 3
+            switch (tipoTrampa)
+            {
+                case 1:
+                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaDevolver(5)); // Devolver 5 celdas
+                    break;
+                case 2:
+                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaQuitarTurno());
+                    break;
+                case 3:
+                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaAnularHabilidad());
+                    break; 
+            }
+
+            posicionesCamino.Remove(posicionTrampa); // Eliminar la posición para no repetir
+        }
+    }  
+
+    private void AgregarPescado(int cantidad)
+    {
+
+         List<(int x, int y)> posicionesCamino = PosicionesCamino();
+        for (int i = 0; i <=cantidad; i++)
+        {
+            var posicionPescado = posicionesCamino[rand.Next(posicionesCamino.Count)];
+        
+            tablero[posicionPescado.x, posicionPescado.y].ConvertirEnPescado(); // Devolver 5 celdas
+
+            posicionesCamino.Remove(posicionPescado); // Eliminar la posición para no repetir
+        }
+    }
+
+    
+
+
+   public void MostrarLaberinto()
+   { 
+        
+        for (int i = 0; i < sizeX; i++)
+        {
+            for (int j = 0; j < sizeY; j++)
+            {
+                 if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 1 && tablero[i,j].Tipo!=Celda.TipoCelda.Pared )
                 {
-                    AnsiConsole.Markup("[blue]♠[/]");
+                    AnsiConsole.Markup("[blue]😾[/]");
+                }
+                 else if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 2  && tablero[i,j].Tipo!=Celda.TipoCelda.Pared)
+                {
+                    AnsiConsole.Markup("[blue]😸[/]");
                 }
 
                else if (tablero[i, j].Tipo==Celda.TipoCelda.Camino)
                 {
                     // Imprimir espacio vacío
-                    AnsiConsole.Markup("[green] [/]");
+                    AnsiConsole.Markup("[green]  [/]");
                 }
                 
                 else if (tablero[i,j].Tipo==Celda.TipoCelda.Pared)
                 {
                     // Imprimir bloque del laberinto en verde
-                    AnsiConsole.Markup("[green]█[/]");
+                    AnsiConsole.Markup("[green]🧱[/]");
                 }
                 
                 else if (tablero[i, j].Tipo == Celda.TipoCelda.Trampa)
                 { 
                     if (tablero[i, j].TrampaAsociada is TrampaDevolver)
                     {
-                        AnsiConsole.Markup("[red]D[/]"); 
+                        AnsiConsole.Markup("[red]❌[/]"); 
                     }
                     else if (tablero[i, j].TrampaAsociada is TrampaAnularHabilidad)
                     {
-                        AnsiConsole.Markup("[red]A[/]"); // A para Anular Habilidad
+                        AnsiConsole.Markup("[red]🛑[/]"); // A para Anular Habilidad
                     }
                     else if (tablero[i, j].TrampaAsociada is TrampaQuitarTurno)
                     {
-                        AnsiConsole.Markup("[red]Q[/]"); // T para Quitar Turno
+                        AnsiConsole.Markup("[red]🚫[/]"); // T para Quitar Turno
                     }
+                }
+
+                else if (tablero[i,j].Tipo==Celda.TipoCelda.Pescado)
+                {
+                    AnsiConsole.Markup("[red]🐠[/]");
                 }
 
                 

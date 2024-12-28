@@ -7,17 +7,18 @@ public class Juego
     
     public Juego()
     {
+        Console.Clear();
         jugadores=new List<Jugador>();
         int[] PosicionesX={1,19};
         int[] PosicionesY={1,19};
         laberinto = new Laberinto(21, 21);
        fichas = new List<Fichas>
         {
-            new Fichas("Ficha 1", "volar",10, 23 ),
-            new Fichas("Ficha 2", "volar",10, 23),
-            new Fichas("Ficha 3", "volar",10, 23 ),
-            new Fichas("Ficha 4", "volar",10, 23 ),
-            new Fichas("Ficha 5", "volar",10, 23),
+            new Fichas("Ficha 1", "jugar dos veces",10, 4 ),
+            new Fichas("Ficha 2", "supervelocidad",10, 3),
+            new Fichas("Ficha 3", "inmune a trampa",10, 2 ),
+            new Fichas("Ficha 4", "",10, 5 ),
+            new Fichas("Ficha 5", "volar",10, 3),
         };
         
         for (int i = 0; i <2; i++)
@@ -28,9 +29,10 @@ public class Juego
             laberinto.tablero[PosicionesX[i], PosicionesY[i]].jugador = jugador;
             jugador.FichaElegida = ElegirFicha(jugador);
             jugadores.Add(jugador);
+            Console.Clear();
         }
 
-       
+       //Console.Clear();
     }
     
         public Fichas ElegirFicha(Jugador jugador)
@@ -57,13 +59,16 @@ public class Juego
     }
 
      public void Jugar()
-    {int i=0;
+    {   int i=0;
+       // Console.Clear();
         while (true)
         {   
-            
-            laberinto.MostrarLaberinto();
-            JugarTurno(jugadores[i%2]);
-            Console.Clear();
+            for (int j = 0; j < jugadores[i%2].FichaElegida.Velocidad; j++)
+            {
+                laberinto.MostrarLaberinto();
+                 JugarTurno(jugadores[i%2]);
+                 Console.Clear();
+            }
             i++;
             //ver siha ganado o no
             
@@ -85,15 +90,15 @@ public class Juego
             newPositionX--;
             break;
 
-            case ConsoleKey.S:
+            case ConsoleKey.S://mover abajo
             newPositionX++;
             break;
 
-            case ConsoleKey.D:
+            case ConsoleKey.D: //mover derecha
             newPositionY++;
             break;
 
-            case ConsoleKey.A:
+            case ConsoleKey.A: //mover izquierda
             newPositionY--;
             break;
             
@@ -114,8 +119,11 @@ public class Juego
         }
         else JugarTurno(jugador);
 
-        
-
+        if (laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Trampa)
+        {
+            laberinto.tablero[jugador.PositionX, jugador.PositionY].TrampaAsociada.Activar(jugador);
+            Console.WriteLine("Trampa activada");//ver esto
+        }
     }
     
        public bool EsMovimientoValido(int x, int y)
