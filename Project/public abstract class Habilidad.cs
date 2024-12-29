@@ -34,9 +34,8 @@ public class HabilidadDuplicarPuntos : Habilidad
 
     public override void Activar(Jugador jugador, Laberinto laberinto)
     {
-       if (PuedeActivar() && laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo == Celda.TipoCelda.Pescado)
+       if (PuedeActivar())
         {
-            jugador.Puntuacion += 2;
             TurnosRestantes = TiempoEnfriamiento; // Reiniciar el tiempo de enfriamiento
         }
     }
@@ -44,7 +43,7 @@ public class HabilidadDuplicarPuntos : Habilidad
 
 public class HabilidadSuperVelocidad : Habilidad
 {
-         int velocidadOriginal;
+    int velocidadOriginal;
 
     public HabilidadSuperVelocidad()
     {
@@ -65,7 +64,6 @@ public class HabilidadSuperVelocidad : Habilidad
 
      public void RestablecerVelocidad(Jugador jugador)
     {
-        // Restablecer la velocidad a la original
         jugador.FichaElegida.Velocidad = velocidadOriginal; //esto no pincha revisa
     }
 }
@@ -82,10 +80,9 @@ public class HabilidadInmunidad : Habilidad
     {
        if (PuedeActivar())
        {
-        //logica
+        jugador.FichaElegida.EsInmune=true;
         TurnosRestantes = TiempoEnfriamiento; // Reiniciar el tiempo de enfriamiento
        }
-        Console.WriteLine($"{jugador.Nombre} Eres inmune a trampas");
     }
 }
 
@@ -118,5 +115,23 @@ public class HabilidadTeletransportacion : Habilidad
 
         TurnosRestantes = TiempoEnfriamiento; // Reiniciar el tiempo de enfriamiento
         }
+    }
+}
+public class HabilidadAtrabezarPared : Habilidad
+{
+    public HabilidadAtrabezarPared()
+    {
+        Nombre = "Atrabezar Pared";
+        TiempoEnfriamiento=2;
+    }
+
+    public override void Activar(Jugador jugador, Laberinto laberinto)
+    {
+       if (PuedeActivar())
+       {
+        
+        TurnosRestantes = TiempoEnfriamiento; // Reiniciar el tiempo de enfriamiento
+       }
+
     }
 }

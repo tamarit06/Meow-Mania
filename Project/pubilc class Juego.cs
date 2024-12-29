@@ -17,8 +17,8 @@ public class Juego
             new Fichas("Ficha 1", new HabilidadDuplicarPuntos(),10, 20 ),
             new Fichas("Ficha 2",new HabilidadSuperVelocidad(),10, 10),
             new Fichas("Ficha 3", new HabilidadTeletransportacion(),1, 20),
-            new Fichas("Ficha 4", new HabilidadTeletransportacion(),1, 20 ),
-            new Fichas("Ficha 5", new HabilidadSuperVelocidad(),10, 10),
+            new Fichas("Ficha 4", new HabilidadAtrabezarPared(),1, 5 ),
+            new Fichas("Ficha 5", new HabilidadInmunidad(),10, 10),
         };
         
         for (int i = 0; i <2; i++)
@@ -67,11 +67,12 @@ public class Juego
                 laberinto.MostrarLaberinto();
                  Movimiento(jugadores[i%2]);
                  Console.Clear();
+                 
             }
             
              if (jugadores[i%2].FichaElegida.Habilidad is HabilidadSuperVelocidad habilidadSuperVelocidad)
         {
-            if (habilidadSuperVelocidad.TurnosRestantes ==0)
+            if (habilidadSuperVelocidad.TurnosRestantes ==jugadores[i%2].FichaElegida.Habilidad.TiempoEnfriamiento)
             {
                 habilidadSuperVelocidad.RestablecerVelocidad(jugadores[i % 2]);
             }
@@ -119,8 +120,29 @@ public class Juego
             default:
             return;
         }
+         int difx=newPositionX-jugador.PositionX;
+         int dify=newPositionY-jugador.PositionY;
 
-        if (EsMovimientoValido(newPositionX, newPositionY))
+        if (laberinto.tablero[newPositionX, newPositionY].Tipo==Celda.TipoCelda.Pared &&
+            jugador.FichaElegida.Habilidad is HabilidadAtrabezarPared &&
+            jugador.FichaElegida.Habilidad.TurnosRestantes == jugador.FichaElegida.Habilidad.TiempoEnfriamiento &&
+            EsMovimientoValido(newPositionX+difx, newPositionY+dify))
+        {
+           
+
+            laberinto.tablero[jugador.PositionX,jugador.PositionY].HayJugador = false;
+            laberinto.tablero[jugador.PositionX,jugador.PositionY].jugador = null;
+
+            jugador.PositionX=newPositionX+difx;
+            jugador.PositionY=newPositionY+dify;
+
+            laberinto.tablero[jugador.PositionX,jugador.PositionY].HayJugador = true;
+            laberinto.tablero[jugador.PositionX,jugador.PositionY].jugador = jugador;
+
+
+        }
+
+        else if (EsMovimientoValido(newPositionX, newPositionY))
         {   
             laberinto.tablero[jugador.PositionX,jugador.PositionY].HayJugador = false;
             laberinto.tablero[jugador.PositionX,jugador.PositionY].jugador = null;
@@ -133,12 +155,20 @@ public class Juego
         }
         else Movimiento(jugador);
 
-        if (laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Trampa)
+        if (laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Trampa &&
+            !jugador.FichaElegida.EsInmune)
         {
             laberinto.tablero[jugador.PositionX, jugador.PositionY].TrampaAsociada.Activar(jugador);
         }
 
-        if (laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Pescado)
+        if (laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Pescado&&
+        jugador.FichaElegida.Habilidad is HabilidadDuplicarPuntos && jugador.FichaElegida.Habilidad.TurnosRestantes==jugador.FichaElegida.Habilidad.TiempoEnfriamiento)
+        {
+            laberinto.tablero[jugador.PositionX, jugador.PositionY].ConvertirEnCamino();
+            jugador.Puntuacion+=2;
+        }
+
+        else if(laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Pescado)
         {
             laberinto.tablero[jugador.PositionX, jugador.PositionY].ConvertirEnCamino();
             jugador.Puntuacion++;
