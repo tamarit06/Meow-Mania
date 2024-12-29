@@ -58,7 +58,6 @@ public class Juego
 
      public void Jugar()
     {   int i=0;
-       // Console.Clear();
         while (true)
         {   
             for (int j = 0; j < jugadores[i%2].FichaElegida.Velocidad; j++)
@@ -71,17 +70,31 @@ public class Juego
             }
             
              if (jugadores[i%2].FichaElegida.Habilidad is HabilidadSuperVelocidad habilidadSuperVelocidad)
-        {
-            if (habilidadSuperVelocidad.TurnosRestantes ==jugadores[i%2].FichaElegida.Habilidad.TiempoEnfriamiento)
             {
-                habilidadSuperVelocidad.RestablecerVelocidad(jugadores[i % 2]);
+                if (habilidadSuperVelocidad.TurnosRestantes ==jugadores[i%2].FichaElegida.Habilidad.TiempoEnfriamiento)
+                {
+                    habilidadSuperVelocidad.RestablecerVelocidad(jugadores[i % 2]);
+                }
+                jugadores[i%2].FichaElegida.ActualizarEnfriamiento();
             }
-            jugadores[i%2].FichaElegida.ActualizarEnfriamiento();
-        }
             i++;
-            //ver siha ganado o no
+            
+            if (!HayPescado())
+            {
+                break;
+            }
             
         }
+
+        if (jugadores[0].Puntuacion==jugadores[1].Puntuacion)
+        {
+            Console.WriteLine("Empate");
+        }
+        else if (jugadores[0].Puntuacion>jugadores[1].Puntuacion)
+        {
+            Console.WriteLine($"{jugadores[0].Nombre} ha ganado!!!");
+        }
+        else{Console.WriteLine($"{jugadores[1].Nombre} ha ganado!!!");}
     }
 
     public void Movimiento(Jugador jugador)
@@ -176,36 +189,52 @@ public class Juego
     }
     
        public bool EsMovimientoValido(int x, int y)
-{
-    // Validar que el laberinto y el tablero estén inicializados
-    if (laberinto == null || laberinto.Tablero == null)
     {
-        Console.WriteLine("Error: El laberinto no está inicializado correctamente.");
-        return false;
+        // Validar que el laberinto y el tablero estén inicializados
+        if (laberinto == null || laberinto.Tablero == null)
+        {
+            Console.WriteLine("Error: El laberinto no está inicializado correctamente.");
+            return false;
+        }
+
+        // Validar que las coordenadas estén dentro de los límites del tablero
+        if (x < 0 || x >= laberinto.sizeX || y < 0 || y >= laberinto.sizeY)
+        {
+            Console.WriteLine($"Error: Movimiento fuera de los límites del laberinto. Coordenadas: ({x}, {y})");
+            return false;
+        }
+
+        // Validar que la celda no sea una pared
+        if (laberinto.Tablero[x, y].Tipo == Celda.TipoCelda.Pared)
+        {
+            Console.WriteLine("Error: Movimiento inválido. La celda es una pared.");
+            return false;
+        }
+        // verificar si hay otro jugador
+        if (laberinto.Tablero[x, y].HayJugador)
+        {
+            Console.WriteLine("Error: Movimiento inválido. La celda tiene otro jugador.");
+            return false;
+        }
+
+        // Si pasa todas las validaciones, el movimiento es válido
+        return true;
     }
 
-    // Validar que las coordenadas estén dentro de los límites del tablero
-    if (x < 0 || x >= laberinto.sizeX || y < 0 || y >= laberinto.sizeY)
+    private bool HayPescado()
     {
-        Console.WriteLine($"Error: Movimiento fuera de los límites del laberinto. Coordenadas: ({x}, {y})");
-        return false;
-    }
+        for (int i = 0; i < laberinto.sizeX; i++)
+        {
+            for (int j = 0; j < laberinto.sizeY; j++)
+            {
+                if (laberinto.tablero[i,j].Tipo==Celda.TipoCelda.Pescado)
+                {
+                    return true;
+                }
+            }
+        }
 
-    // Validar que la celda no sea una pared
-    if (laberinto.Tablero[x, y].Tipo == Celda.TipoCelda.Pared)
-    {
-        Console.WriteLine("Error: Movimiento inválido. La celda es una pared.");
         return false;
     }
-    // verificar si hay otro jugador
-    if (laberinto.Tablero[x, y].HayJugador)
-    {
-        Console.WriteLine("Error: Movimiento inválido. La celda tiene otro jugador.");
-        return false;
-    }
-
-    // Si pasa todas las validaciones, el movimiento es válido
-    return true;
-}
 
     }
