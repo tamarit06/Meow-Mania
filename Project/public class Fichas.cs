@@ -8,7 +8,7 @@ public class Fichas
     public int Velocidad { get; set; } // cantidad de casillas a caminar
     public bool EsInmune {get; set;}
 
-    public Fichas(string nombre, Habilidad habilidad, int tiempoEnfriamiento, int velocidad)
+    public Fichas(string nombre, Habilidad habilidad, int velocidad)
     {
         Nombre = nombre;
         Habilidad = habilidad;

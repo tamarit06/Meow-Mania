@@ -29,7 +29,7 @@ public class HabilidadDuplicarPuntos : Habilidad
     public HabilidadDuplicarPuntos()
     {
         Nombre = "Duplicar Puntos";
-        TiempoEnfriamiento=3;
+        TiempoEnfriamiento=6;
     }
 
     public override void Activar(Jugador jugador, Laberinto laberinto)
@@ -48,7 +48,7 @@ public class HabilidadSuperVelocidad : Habilidad
     public HabilidadSuperVelocidad()
     {
         Nombre = "Supervelocidad";
-        TiempoEnfriamiento=4;
+        TiempoEnfriamiento=3;
     }
 
     public override void Activar(Jugador jugador, Laberinto laberinto)
@@ -73,7 +73,7 @@ public class HabilidadInmunidad : Habilidad
     public HabilidadInmunidad()
     {
         Nombre = "Inmunidad a trampa";
-        TiempoEnfriamiento=2;
+        TiempoEnfriamiento=4;
     }
 
     public override void Activar(Jugador jugador, Laberinto laberinto)
@@ -84,6 +84,11 @@ public class HabilidadInmunidad : Habilidad
         TurnosRestantes = TiempoEnfriamiento; // Reiniciar el tiempo de enfriamiento
        }
     }
+
+    public void QuitarInmunidad(Jugador jugador)
+    {
+       jugador.FichaElegida.EsInmune=false;
+    }
 }
 
 public class HabilidadTeletransportacion : Habilidad
@@ -93,7 +98,7 @@ public class HabilidadTeletransportacion : Habilidad
     public HabilidadTeletransportacion()
     {
         Nombre = "Teletransportación Total";
-        TiempoEnfriamiento=3;
+        TiempoEnfriamiento=4;
     }
 
     public override void Activar(Jugador jugador, Laberinto laberinto)
@@ -122,7 +127,7 @@ public class HabilidadAtrabezarPared : Habilidad
     public HabilidadAtrabezarPared()
     {
         Nombre = "Atrabezar Pared";
-        TiempoEnfriamiento=2;
+        TiempoEnfriamiento=3;
     }
 
     public override void Activar(Jugador jugador, Laberinto laberinto)

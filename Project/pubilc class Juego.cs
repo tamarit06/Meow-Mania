@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Spectre.Console;
 public class Juego
 {
     public List<Fichas> fichas{get; set;}
@@ -7,6 +8,32 @@ public class Juego
     
     public Juego()
     {
+       Console.Clear();
+        AnsiConsole.Live(new Panel(""))
+        .Start(ctx =>
+           {
+         var panel = new Panel($"[underline bold italic yellow]¡Bienvenido al juego!🎮[/]")
+                .Border(BoxBorder.Double)
+                .Header("[yellow][/]");
+
+           ctx.UpdateTarget(panel);
+        
+           });
+
+            // Repetir la melodía 2 veces
+            for (int i = 0; i < 2; i++)
+            {
+                // Melodía simple
+                Console.Beep(659, 200); // Mi
+                Console.Beep(659, 200); // Mi
+                Console.Beep(659, 200); // Mi
+                Console.Beep(523, 200); // Do
+                Console.Beep(659, 200); // Mi
+                Console.Beep(784, 400); // Sol
+                Console.Beep(392, 400); // Sol (una octava más baja)
+                Console.Beep(523, 400); // Do
+            }
+
         Console.Clear();
         jugadores=new List<Jugador>();
         int[] PosicionesX={1,19};
@@ -14,16 +41,16 @@ public class Juego
         laberinto = new Laberinto(21, 21);
        fichas = new List<Fichas>
         {
-            new Fichas("Ficha 1", new HabilidadDuplicarPuntos(),10, 20 ),
-            new Fichas("Ficha 2",new HabilidadSuperVelocidad(),10, 10),
-            new Fichas("Ficha 3", new HabilidadTeletransportacion(),1, 20),
-            new Fichas("Ficha 4", new HabilidadAtrabezarPared(),1, 5 ),
-            new Fichas("Ficha 5", new HabilidadInmunidad(),10, 10),
+            new Fichas("Ficha 1", new HabilidadDuplicarPuntos(),10),
+            new Fichas("Ficha 2",new HabilidadSuperVelocidad(),8),
+            new Fichas("Ficha 3", new HabilidadTeletransportacion(),10),
+            new Fichas("Ficha 4", new HabilidadAtrabezarPared(),8),
+            new Fichas("Ficha 5", new HabilidadInmunidad(),12),
         };
         
         for (int i = 0; i <2; i++)
         {
-            Console.WriteLine($"Jugador {i + 1}, ingresa tu nombre:");
+           AnsiConsole.Markup($"[blue]⚜️ Jugador {i + 1}, ingresa tu nombre:⚜️[/]\n");
             string nombre = Console.ReadLine();
             Jugador jugador = new Jugador(nombre,i+1, PosicionesX[i], PosicionesY[i], laberinto);
             laberinto.tablero[PosicionesX[i], PosicionesY[i]].jugador = jugador;
@@ -33,31 +60,39 @@ public class Juego
         }
     }
     
-        public Fichas ElegirFicha(Jugador jugador)
+  
+
+public Fichas ElegirFicha(Jugador jugador)
+{
+    // Lista de fichas disponibles
+    int fichasDisponibles = fichas.Count;
+
+    // Crear una lista de opciones para el menú
+    var opciones = new List<string>();
+    for (int i = 0; i < fichas.Count; i++)
     {
-        int fichasDisponibles=5;
-        Console.WriteLine($"{jugador.Nombre}, elige una ficha:");
-        for (int i = 0; i < fichas.Count; i++)
-        {
-            Console.WriteLine($"{i + 1}. {fichas[i].Nombre} (Habilidad: {fichas[i].Habilidad.Nombre}) (Velocidad: {fichas[i].Velocidad})  (Tiempo de enfriamiento: {fichas[i].Habilidad.TiempoEnfriamiento})");
-        }
-
-        int seleccion = int.Parse(Console.ReadLine()) - 1;
-
-        if (seleccion < 0 || seleccion >= fichasDisponibles)
-        {
-            Console.WriteLine("Selección no válida. Intenta de nuevo.");
-            return ElegirFicha(jugador); // Volver a llamar al método si la selección es inválida
-        }
-
-        Fichas fichaElegida =fichas[seleccion];
-        fichas.RemoveAt(seleccion); // Eliminar la ficha elegida de la lista
-        fichasDisponibles--;
-        return fichaElegida;
+        opciones.Add($"{i + 1}. {fichas[i].Nombre} (Habilidad: {fichas[i].Habilidad.Nombre}, Velocidad: {fichas[i].Velocidad}, Tiempo de enfriamiento: {fichas[i].Habilidad.TiempoEnfriamiento})");
     }
 
+    // Mostrar el menú y permitir al usuario seleccionar una opción
+    var seleccion = AnsiConsole.Prompt(
+        new SelectionPrompt<string>()
+            .Title("[blue]⚜️ Por favor, elige una ficha:⚜️[/]")
+            .AddChoices(opciones));
+
+    // Obtener el índice de la opción seleccionada
+    int indiceSeleccionado = opciones.IndexOf(seleccion);
+
+    // Obtener la ficha elegida
+    Fichas fichaElegida = fichas[indiceSeleccionado];
+    fichas.RemoveAt(indiceSeleccionado); // Eliminar la ficha elegida de la lista
+    return fichaElegida;
+}
+
      public void Jugar()
-    {   int i=0;
+    {  
+        Console.Clear();
+         int i=0;
         while (true)
         {   
             for (int j = 0; j < jugadores[i%2].FichaElegida.Velocidad; j++)
@@ -68,14 +103,23 @@ public class Juego
                  Console.Clear();
                  
             }
+               jugadores[i%2].FichaElegida.ActualizarEnfriamiento();
             
              if (jugadores[i%2].FichaElegida.Habilidad is HabilidadSuperVelocidad habilidadSuperVelocidad)
             {
-                if (habilidadSuperVelocidad.TurnosRestantes ==jugadores[i%2].FichaElegida.Habilidad.TiempoEnfriamiento)
+                if (habilidadSuperVelocidad.TurnosRestantes !=jugadores[i%2].FichaElegida.Habilidad.TiempoEnfriamiento)
                 {
-                    habilidadSuperVelocidad.RestablecerVelocidad(jugadores[i % 2]);
+                    habilidadSuperVelocidad.RestablecerVelocidad(jugadores[i%2]);
                 }
-                jugadores[i%2].FichaElegida.ActualizarEnfriamiento();
+                
+            }
+
+            if (jugadores[i%2].FichaElegida.Habilidad is HabilidadInmunidad habilidadInmunidad)
+            {
+                if (habilidadInmunidad.TurnosRestantes !=jugadores[i%2].FichaElegida.Habilidad.TiempoEnfriamiento)
+                {
+                    habilidadInmunidad.QuitarInmunidad(jugadores[i%2]);
+                }
             }
             i++;
             
@@ -88,18 +132,18 @@ public class Juego
 
         if (jugadores[0].Puntuacion==jugadores[1].Puntuacion)
         {
-            Console.WriteLine("Empate");
+            AnsiConsole.Markup("[yellow]Empate🐈[/]");
         }
         else if (jugadores[0].Puntuacion>jugadores[1].Puntuacion)
         {
-            Console.WriteLine($"{jugadores[0].Nombre} ha ganado!!!");
+            AnsiConsole.Markup($"[yellow]{jugadores[0].Nombre} ha ganado😸🎉[/]");
         }
-        else{Console.WriteLine($"{jugadores[1].Nombre} ha ganado!!!");}
+        else{AnsiConsole.Markup($"[yellow]{jugadores[1].Nombre} ha ganado😸🎉[/]");}
     }
 
     public void Movimiento(Jugador jugador)
     {
-        Console.WriteLine($"{jugador.Nombre}, usa W (arriba), A (izquierda), S (abajo), D (derecha):");
+       AnsiConsole.Markup($"[red]{jugador.Nombre}, usa W (arriba), A (izquierda), S (abajo), D (derecha):[/]");
         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
         Console.WriteLine();
 
@@ -172,6 +216,7 @@ public class Juego
             !jugador.FichaElegida.EsInmune)
         {
             laberinto.tablero[jugador.PositionX, jugador.PositionY].TrampaAsociada.Activar(jugador);
+            laberinto.tablero[jugador.PositionX, jugador.PositionY].ConvertirEnCamino();
         }
 
         if (laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Pescado&&

@@ -18,7 +18,7 @@ public class Laberinto
         InicializarTablero();
         GenerarLaberintoConPrim();
         AgregarTrampas(8);
-        AgregarPescado(7);
+        AgregarPescado(10);
     }
 
     private void InicializarTablero()
@@ -146,7 +146,7 @@ public class Laberinto
                 }
                  else if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 2  && tablero[i,j].Tipo!=Celda.TipoCelda.Pared)
                 {
-                    AnsiConsole.Markup("[blue]😸[/]");
+                    AnsiConsole.Markup("[blue]😼[/]");
                 }
 
                else if (tablero[i, j].Tipo==Celda.TipoCelda.Camino)
@@ -165,21 +165,21 @@ public class Laberinto
                 { 
                     if (tablero[i, j].TrampaAsociada is TrampaQuitarPunto)
                     {
-                        AnsiConsole.Markup("[red]❌[/]"); 
+                        AnsiConsole.Markup("⛔"); 
                     }
                     else if (tablero[i, j].TrampaAsociada is TrampaAumentarTurnosRestantes)
                     {
-                        AnsiConsole.Markup("[red]🛑[/]"); // A para Anular Habilidad
+                        AnsiConsole.Markup("🕐"); // A para Anular Habilidad
                     }
                     else if (tablero[i, j].TrampaAsociada is TrampaDisminuirVelocidad)
                     {
-                        AnsiConsole.Markup("[red]🚫[/]"); // T para Quitar Turno
+                        AnsiConsole.Markup("🛑"); // T para Quitar Turno
                     }
                 }
 
                 else if (tablero[i,j].Tipo==Celda.TipoCelda.Pescado)
                 {
-                    AnsiConsole.Markup("[red]🐠[/]");
+                    AnsiConsole.Markup("🐠");
                 }
 
                 
