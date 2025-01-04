@@ -9,11 +9,20 @@ public class Juego
     private Laberinto laberinto;
     private ScreenBuffer ScreenBuffer; // Buffer de pantalla
 
+     // Definición de frecuencias para algunas notas
+        int C4 = 261; // Do
+        int D4 = 294; // Re
+        int E4 = 329; // Mi
+        int F4 = 349; // Fa
+        int G4 = 392; // Sol
+        int A4 = 440; // La
+        int B4 = 493; // Si
+
     public Juego()
     {
-        ScreenBuffer = new ScreenBuffer(21, 21);
+        ScreenBuffer = new ScreenBuffer(27, 27);
         Console.Clear();
-        AnsiConsole.Live(new Panel(""))
+        /*AnsiConsole.Live(new Panel(""))
             .Start(ctx =>
             {
                 var panel = new Panel($"[underline bold italic yellow]¡Bienvenido al juego!🎮[/]")
@@ -21,7 +30,21 @@ public class Juego
                     .Header("[yellow][/]");
 
                 ctx.UpdateTarget(panel);
-            });
+            });*/
+
+          Console.CursorVisible=false;
+          string message = @"
+     Bienvenido al juego
+         /\_/\
+        ( o.o )
+         > ^ <
+        ";
+        foreach (char c in message)
+        {
+            AnsiConsole.Markup($"[bold italic yellow]{c}[/]");
+            Thread.Sleep(50);
+        }
+        
 
         // Repetir la melodía 2 veces
         for (int i = 0; i < 2; i++)
@@ -39,16 +62,16 @@ public class Juego
 
         Console.Clear();
         jugadores = new List<Jugador>();
-        int[] PosicionesX = { 1, 19 };
-        int[] PosicionesY = { 1, 19 };
-        laberinto = new Laberinto(21, 21);
+        int[] PosicionesX = { 1, 25};
+        int[] PosicionesY = { 1, 25 };
+        laberinto = new Laberinto(27, 27);
         fichas = new List<Fichas>
         {
-            new Fichas("Ficha 1", new HabilidadDuplicarPuntos(), 10),
-            new Fichas("Ficha 2", new HabilidadSuperVelocidad(), 8),
-            new Fichas("Ficha 3", new HabilidadTeletransportacion(), 10),
-            new Fichas("Ficha 4", new HabilidadAtrabezarPared(), 8),
-            new Fichas("Ficha 5", new HabilidadInmunidad(), 12),
+            new Fichas("Ficha 1", new HabilidadDuplicarPuntos(), 12),
+            new Fichas("Ficha 2", new HabilidadSuperVelocidad(), 10),
+            new Fichas("Ficha 3", new HabilidadTeletransportacion(), 12),
+            new Fichas("Ficha 4", new HabilidadAtrabezarPared(), 10),
+            new Fichas("Ficha 5", new HabilidadInmunidad(), 15),
         };
 
         for (int i = 0; i < 2; i++)
@@ -104,7 +127,7 @@ public Fichas ElegirFicha(Jugador jugador)
                 
                 laberinto.DibujarEnBuffer(ScreenBuffer);
                 ScreenBuffer.Render();
-                jugadores[0].MostrarCaracteristicasJugadores(jugadores);
+                jugadores[0].MostrarCaracteristicasJugadores(jugadores[i%2]);
                 Movimiento(jugadores[i%2]);
             }
                jugadores[i%2].FichaElegida.ActualizarEnfriamiento();
@@ -133,16 +156,50 @@ public Fichas ElegirFicha(Jugador jugador)
             }
             
         }
-
+         string mensajeVictoria="";
         if (jugadores[0].Puntuacion==jugadores[1].Puntuacion)
         {
-            AnsiConsole.Markup("[yellow]Empate🐈[/]");
+            AnsiConsole.Markup($"[bold italic yellow]Empate🐈[/]");
         }
         else if (jugadores[0].Puntuacion>jugadores[1].Puntuacion)
         {
-            AnsiConsole.Markup($"[yellow]{jugadores[0].Nombre} ha ganado😸🎉[/]");
+           mensajeVictoria=$"        {jugadores[0].Nombre} ha ganado";
         }
-        else{AnsiConsole.Markup($"[yellow]{jugadores[1].Nombre} ha ganado😸🎉[/]");}
+        else{mensajeVictoria=$"        {jugadores[1].Nombre} ha ganado";}
+
+        mensajeVictoria= mensajeVictoria + @"
+          ___________
+        /__________/|
+     __( _______  )__
+    /  | |       | | \\
+    |  | |       | |  |
+    \_ | |       | | _/
+        \|_______|//
+        \_______//
+            |   |
+            |   |
+        __ _|___|___
+       |___________|";
+
+        Console.Clear();
+         foreach (char c in mensajeVictoria)
+        {
+            AnsiConsole.Markup($"[bold italic yellow]{c}[/]");
+            Thread.Sleep(100);
+        }
+         Console.Beep(E4, 200); // Mi
+        Console.Beep(E4, 200); // Mi
+        Console.Beep(E4, 200); // Mi
+        Console.Beep(G4, 200); // Sol
+        Console.Beep(A4, 200); // La
+        Console.Beep(G4, 200); // Sol
+        
+        Thread.Sleep(100);      // Pausa breve
+
+        Console.Beep(F4, 200); // Fa
+        Console.Beep(E4, 200); // Mi
+        Console.Beep(D4, 200); // Re
+        Console.Beep(C4, 200); // Do
     }
 
     public void Movimiento(Jugador jugador)
@@ -219,6 +276,7 @@ public Fichas ElegirFicha(Jugador jugador)
         {
             laberinto.tablero[jugador.PositionX, jugador.PositionY].TrampaAsociada.Activar(jugador);
             laberinto.tablero[jugador.PositionX, jugador.PositionY].ConvertirEnCamino();
+            Console.Beep(300, 300);
         }
 
         if (laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Pescado&&
@@ -232,6 +290,7 @@ public Fichas ElegirFicha(Jugador jugador)
         {
             laberinto.tablero[jugador.PositionX, jugador.PositionY].ConvertirEnCamino();
             jugador.Puntuacion++;
+            Console.Beep(2000, 300);
         }
     }
     

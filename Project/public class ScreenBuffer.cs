@@ -39,7 +39,7 @@ public class ScreenBuffer
     // Copia el contenido del buffer a la consola
     public void Render()
     {
-        Console.SetCursorPosition(0, 0);
+       Console.SetCursorPosition(0, 0);
         Console.CursorVisible=false;
         for (int y = 0; y < height; y++)
         {

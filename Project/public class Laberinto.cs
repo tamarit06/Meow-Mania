@@ -17,8 +17,8 @@ public class Laberinto
         this.sizeY = sizeY;
         InicializarTablero();
         GenerarLaberintoConPrim();
-        AgregarTrampas(8);
-        AgregarPescado(10);
+        AgregarTrampas(12);
+        AgregarPescado(16);
     }
 
     private void InicializarTablero()
@@ -78,7 +78,7 @@ public class Laberinto
         {
             for (int j = 0; j < sizeY; j++)
             {
-                if (tablero[i, j].Tipo == Celda.TipoCelda.Camino && i!=1 && j!=1 && i!=19 && j!=19)
+                if (tablero[i, j].Tipo == Celda.TipoCelda.Camino && i!=1 && j!=1 && i!=25 && j!=25)
                 {
                     posicionesCamino.Add((i, j));
                 }

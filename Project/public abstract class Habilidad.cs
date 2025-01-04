@@ -48,7 +48,7 @@ public class HabilidadSuperVelocidad : Habilidad
     public HabilidadSuperVelocidad()
     {
         Nombre = "Supervelocidad";
-        TiempoEnfriamiento=3;
+        TiempoEnfriamiento=4;
     }
 
     public override void Activar(Jugador jugador, Laberinto laberinto)
@@ -56,7 +56,7 @@ public class HabilidadSuperVelocidad : Habilidad
         velocidadOriginal=jugador.FichaElegida.Velocidad;
         if (PuedeActivar())
         {
-            jugador.FichaElegida.Velocidad+=5;
+            jugador.FichaElegida.Velocidad+=10;
             TurnosRestantes = TiempoEnfriamiento; // Reiniciar el tiempo de enfriamiento
         }
         
@@ -73,7 +73,7 @@ public class HabilidadInmunidad : Habilidad
     public HabilidadInmunidad()
     {
         Nombre = "Inmunidad a trampa";
-        TiempoEnfriamiento=4;
+        TiempoEnfriamiento=3;
     }
 
     public override void Activar(Jugador jugador, Laberinto laberinto)
@@ -127,7 +127,7 @@ public class HabilidadAtrabezarPared : Habilidad
     public HabilidadAtrabezarPared()
     {
         Nombre = "Atrabezar Pared";
-        TiempoEnfriamiento=3;
+        TiempoEnfriamiento=4;
     }
 
     public override void Activar(Jugador jugador, Laberinto laberinto)

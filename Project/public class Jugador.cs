@@ -22,19 +22,16 @@ public class Jugador
         Puntuacion=0;
     }
 
-    public void MostrarCaracteristicasJugadores(List<Jugador> jugadores)
+    public void MostrarCaracteristicasJugadores(Jugador jugador)
     {
     // Crear una tabla para mostrar las características
     var tabla = new Table();
-    tabla.AddColumn("Jugador");
-    tabla.AddColumn("Puntuación");
-    tabla.AddColumn("Turnos restantes");
-    tabla.AddColumn("Velocidad");
-    tabla.AddColumn("Habilidad");
+    tabla.AddColumn("[blue]Jugador[/]");
+    tabla.AddColumn("[yellow]Puntuación[/]");
+    tabla.AddColumn("[green]Tiempo de enfriamiento[/]");
+    tabla.AddColumn("[red]Velocidad[/]");
+    tabla.AddColumn("[yellow]Habilidad[/]");
 
-    foreach (var jugador in jugadores)
-    {
-        // Agregar una fila por cada jugador
         tabla.AddRow(
             $"[blue]{jugador.Nombre}[/]",
             $"[yellow]{jugador.Puntuacion}[/]", 
@@ -42,7 +39,7 @@ public class Jugador
             $"[red]{jugador.FichaElegida.Velocidad}[/]",
             $"[yellow]{jugador.FichaElegida.Habilidad.Nombre}[/]"    
         );
-    }
+    
 
     // Mostrar la tabla en la consola
     AnsiConsole.Render(tabla);
