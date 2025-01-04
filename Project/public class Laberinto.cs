@@ -151,9 +151,8 @@ public class Laberinto
 
                else if (tablero[i, j].Tipo==Celda.TipoCelda.Camino)
                 {
-                    // Imprimir espacio vacío
-                    AnsiConsole.Markup("[green]  [/]");
-                }
+                screenBuffer.Draw(j, i, "[green]  [/]"); // Camino
+            }
                 
                 else if (tablero[i,j].Tipo==Celda.TipoCelda.Pared)
                 {
