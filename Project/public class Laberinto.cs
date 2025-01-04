@@ -133,64 +133,60 @@ public class Laberinto
     
 
 
-   public void MostrarLaberinto()
-   { 
-
+    public void DibujarEnBuffer(ScreenBuffer buffer)
+    {
         for (int i = 0; i < sizeX; i++)
         {
             for (int j = 0; j < sizeY; j++)
             {
-                 if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 1 && tablero[i,j].Tipo!=Celda.TipoCelda.Pared )
-                {
-                    AnsiConsole.Markup("[blue]😾[/]");
-                }
-                 else if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 2  && tablero[i,j].Tipo!=Celda.TipoCelda.Pared)
-                {
-                    AnsiConsole.Markup("[blue]😼[/]");
-                }
-
-               else if (tablero[i, j].Tipo==Celda.TipoCelda.Camino)
-                {
-                screenBuffer.Draw(j, i, "[green]  [/]"); // Camino
-            }
+                string contenido = " ";
                 
-                else if (tablero[i,j].Tipo==Celda.TipoCelda.Pared)
+                if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 1 && tablero[i,j].Tipo!=Celda.TipoCelda.Pared)
                 {
-                    // Imprimir bloque del laberinto en verde
-                    AnsiConsole.Markup("[green]🧱[/]");
+                    contenido = "[blue]😾[/]";
                 }
-                
+                else if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 2 && tablero[i,j].Tipo!=Celda.TipoCelda.Pared)
+                {
+                    contenido = "[blue]😼[/]";
+                }
+                else if (tablero[i, j].Tipo == Celda.TipoCelda.Camino)
+                {
+                    contenido = "[green]  [/]";
+                }
+                else if (tablero[i,j].Tipo == Celda.TipoCelda.Pared)
+                {
+                    contenido = "[green]🧱[/]";
+                }
                 else if (tablero[i, j].Tipo == Celda.TipoCelda.Trampa)
-                { 
+                {
                     if (tablero[i, j].TrampaAsociada is TrampaQuitarPunto)
                     {
-                        AnsiConsole.Markup("⛔"); 
+                        contenido = "⛔";
                     }
                     else if (tablero[i, j].TrampaAsociada is TrampaAumentarTurnosRestantes)
                     {
-                        AnsiConsole.Markup("🕐"); // A para Anular Habilidad
+                        contenido = "🕐";
                     }
                     else if (tablero[i, j].TrampaAsociada is TrampaDisminuirVelocidad)
                     {
-                        AnsiConsole.Markup("🛑"); // T para Quitar Turno
+                        contenido = "🛑";
                     }
                 }
-
-                else if (tablero[i,j].Tipo==Celda.TipoCelda.Pescado)
+                else if (tablero[i,j].Tipo == Celda.TipoCelda.Pescado)
                 {
-                    AnsiConsole.Markup("🐠");
+                    contenido = "🐠";
                 }
 
-                
+                buffer.Draw(j, i, contenido);
             }
-            AnsiConsole.WriteLine(""); 
         }
-   }
+    }
 
     public bool EsValido(int x, int y)
     {
         return x >= 0 && x < sizeX && y >= 0 && y < sizeY;
     }
+    
 
     public Celda[,] Tablero => tablero;
 }

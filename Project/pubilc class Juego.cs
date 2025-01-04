@@ -1,64 +1,68 @@
+using System;
 using System.Collections.Generic;
 using Spectre.Console;
+
 public class Juego
 {
-    public List<Fichas> fichas{get; set;}
-    public List<Jugador> jugadores{get; set;}
+    public List<Fichas> fichas { get; set; }
+    public List<Jugador> jugadores { get; set; }
     private Laberinto laberinto;
-    
+    private ScreenBuffer ScreenBuffer; // Buffer de pantalla
+
     public Juego()
     {
-       Console.Clear();
+        ScreenBuffer = new ScreenBuffer(21, 21);
+        Console.Clear();
         AnsiConsole.Live(new Panel(""))
-        .Start(ctx =>
-           {
-         var panel = new Panel($"[underline bold italic yellow]¡Bienvenido al juego!🎮[/]")
-                .Border(BoxBorder.Double)
-                .Header("[yellow][/]");
-
-           ctx.UpdateTarget(panel);
-        
-           });
-
-            // Repetir la melodía 2 veces
-            for (int i = 0; i < 2; i++)
+            .Start(ctx =>
             {
-                // Melodía simple
-                Console.Beep(659, 200); // Mi
-                Console.Beep(659, 200); // Mi
-                Console.Beep(659, 200); // Mi
-                Console.Beep(523, 200); // Do
-                Console.Beep(659, 200); // Mi
-                Console.Beep(784, 400); // Sol
-                Console.Beep(392, 400); // Sol (una octava más baja)
-                Console.Beep(523, 400); // Do
-            }
+                var panel = new Panel($"[underline bold italic yellow]¡Bienvenido al juego!🎮[/]")
+                    .Border(BoxBorder.Double)
+                    .Header("[yellow][/]");
+
+                ctx.UpdateTarget(panel);
+            });
+
+        // Repetir la melodía 2 veces
+        for (int i = 0; i < 2; i++)
+        {
+            // Melodía simple
+            Console.Beep(659, 200); // Mi
+            Console.Beep(659, 200); // Mi
+            Console.Beep(659, 200); // Mi
+            Console.Beep(523, 200); // Do
+            Console.Beep(659, 200); // Mi
+            Console.Beep(784, 400); // Sol
+            Console.Beep(392, 400); // Sol (una octava más baja)
+            Console.Beep(523, 400); // Do
+        }
 
         Console.Clear();
-        jugadores=new List<Jugador>();
-        int[] PosicionesX={1,19};
-        int[] PosicionesY={1,19};
+        jugadores = new List<Jugador>();
+        int[] PosicionesX = { 1, 19 };
+        int[] PosicionesY = { 1, 19 };
         laberinto = new Laberinto(21, 21);
-       fichas = new List<Fichas>
+        fichas = new List<Fichas>
         {
-            new Fichas("Ficha 1", new HabilidadDuplicarPuntos(),10),
-            new Fichas("Ficha 2",new HabilidadSuperVelocidad(),8),
-            new Fichas("Ficha 3", new HabilidadTeletransportacion(),10),
-            new Fichas("Ficha 4", new HabilidadAtrabezarPared(),8),
-            new Fichas("Ficha 5", new HabilidadInmunidad(),12),
+            new Fichas("Ficha 1", new HabilidadDuplicarPuntos(), 10),
+            new Fichas("Ficha 2", new HabilidadSuperVelocidad(), 8),
+            new Fichas("Ficha 3", new HabilidadTeletransportacion(), 10),
+            new Fichas("Ficha 4", new HabilidadAtrabezarPared(), 8),
+            new Fichas("Ficha 5", new HabilidadInmunidad(), 12),
         };
-        
-        for (int i = 0; i <2; i++)
+
+        for (int i = 0; i < 2; i++)
         {
-           AnsiConsole.Markup($"[blue]⚜️ Jugador {i + 1}, ingresa tu nombre:⚜️[/]\n");
+            AnsiConsole.Markup($"[blue]⚜️ Jugador {i + 1}, ingresa tu nombre:⚜️[/]\n");
             string nombre = Console.ReadLine();
-            Jugador jugador = new Jugador(nombre,i+1, PosicionesX[i], PosicionesY[i], laberinto);
+            Jugador jugador = new Jugador(nombre, i + 1, PosicionesX[i], PosicionesY[i], laberinto);
             laberinto.tablero[PosicionesX[i], PosicionesY[i]].jugador = jugador;
             jugador.FichaElegida = ElegirFicha(jugador);
             jugadores.Add(jugador);
             Console.Clear();
         }
     }
+
     
   
 
@@ -97,17 +101,17 @@ public Fichas ElegirFicha(Jugador jugador)
         {   
             for (int j = 0; j < jugadores[i%2].FichaElegida.Velocidad; j++)
             {
+                
+                laberinto.DibujarEnBuffer(ScreenBuffer);
+                ScreenBuffer.Render();
                 jugadores[0].MostrarCaracteristicasJugadores(jugadores);
-                laberinto.MostrarLaberinto();
-                 Movimiento(jugadores[i%2]);
-                 Console.Clear();
-                 
+                Movimiento(jugadores[i%2]);
             }
                jugadores[i%2].FichaElegida.ActualizarEnfriamiento();
             
              if (jugadores[i%2].FichaElegida.Habilidad is HabilidadSuperVelocidad habilidadSuperVelocidad)
             {
-                if (habilidadSuperVelocidad.TurnosRestantes !=jugadores[i%2].FichaElegida.Habilidad.TiempoEnfriamiento)
+                if (habilidadSuperVelocidad.TurnosRestantes==jugadores[i%2].FichaElegida.Habilidad.TiempoEnfriamiento-1)
                 {
                     habilidadSuperVelocidad.RestablecerVelocidad(jugadores[i%2]);
                 }
@@ -143,9 +147,7 @@ public Fichas ElegirFicha(Jugador jugador)
 
     public void Movimiento(Jugador jugador)
     {
-       AnsiConsole.Markup($"[red]{jugador.Nombre}, usa W (arriba), A (izquierda), S (abajo), D (derecha):[/]");
         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-        Console.WriteLine();
 
         if (keyInfo.Key == ConsoleKey.H && jugador.FichaElegida.Habilidad.PuedeActivar()) // Activar habilidad
     {
@@ -238,27 +240,23 @@ public Fichas ElegirFicha(Jugador jugador)
         // Validar que el laberinto y el tablero estén inicializados
         if (laberinto == null || laberinto.Tablero == null)
         {
-            Console.WriteLine("Error: El laberinto no está inicializado correctamente.");
             return false;
         }
 
         // Validar que las coordenadas estén dentro de los límites del tablero
         if (x < 0 || x >= laberinto.sizeX || y < 0 || y >= laberinto.sizeY)
         {
-            Console.WriteLine($"Error: Movimiento fuera de los límites del laberinto. Coordenadas: ({x}, {y})");
             return false;
         }
 
         // Validar que la celda no sea una pared
         if (laberinto.Tablero[x, y].Tipo == Celda.TipoCelda.Pared)
         {
-            Console.WriteLine("Error: Movimiento inválido. La celda es una pared.");
             return false;
         }
         // verificar si hay otro jugador
         if (laberinto.Tablero[x, y].HayJugador)
         {
-            Console.WriteLine("Error: Movimiento inválido. La celda tiene otro jugador.");
             return false;
         }
 
@@ -282,4 +280,4 @@ public Fichas ElegirFicha(Jugador jugador)
         return false;
     }
 
-    }
+}

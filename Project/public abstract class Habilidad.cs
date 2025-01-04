@@ -64,7 +64,7 @@ public class HabilidadSuperVelocidad : Habilidad
 
      public void RestablecerVelocidad(Jugador jugador)
     {
-        jugador.FichaElegida.Velocidad = velocidadOriginal; //esto no pincha revisa
+        jugador.FichaElegida.Velocidad = velocidadOriginal; 
     }
 }
 
