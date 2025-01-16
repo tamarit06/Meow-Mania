@@ -12,19 +12,6 @@ public class ScreenBuffer
         this.width = width;
         this.height = height;
         buffer = new string[height, width];
-        ClearBuffer();
-    }
-
-    // Limpia el buffer con espacios en blanco
-    public void ClearBuffer()
-    {
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                buffer[y, x] = " "; // Espacio en blanco
-            }
-        }
     }
 
     // Dibuja un carácter con formato (colores, símbolos) en una posición específica del buffer
