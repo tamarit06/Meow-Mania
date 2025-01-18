@@ -18,7 +18,7 @@ public class Laberinto
         InicializarTablero();
         GenerarLaberintoConPrim();
         AgregarTrampas(12);
-        AgregarPescado(0);
+        AgregarPescado(24);
     }
 
     private void InicializarTablero()

@@ -43,7 +43,7 @@ public class HabilidadDuplicarPuntos : Habilidad
 
 public class HabilidadSuperVelocidad : Habilidad
 {
-    int velocidadOriginal;
+    int velORIG;
 
     public HabilidadSuperVelocidad()
     {
@@ -53,18 +53,20 @@ public class HabilidadSuperVelocidad : Habilidad
 
     public override void Activar(Jugador jugador, Laberinto laberinto)
     {
-        velocidadOriginal=jugador.FichaElegida.Velocidad;
+        velORIG=jugador.FichaElegida.VelocidadOriginal;
         if (PuedeActivar())
         {
+            jugador.FichaElegida.VelocidadOriginal+=10;
             jugador.FichaElegida.Velocidad+=10;
             TurnosRestantes = TiempoEnfriamiento; // Reiniciar el tiempo de enfriamiento
         }
         
     }
 
-     public void RestablecerVelocidad(Jugador jugador)
+     public void RestablecerVelocidadHabilidad(Jugador jugador)
     {
-        jugador.FichaElegida.Velocidad = velocidadOriginal; 
+        jugador.FichaElegida.VelocidadOriginal = velORIG; 
+        jugador.FichaElegida.Velocidad=velORIG;
     }
 }
 
@@ -122,11 +124,11 @@ public class HabilidadTeletransportacion : Habilidad
         }
     }
 }
-public class HabilidadAtrabezarPared : Habilidad
+public class HabilidadAtravesarPared : Habilidad
 {
-    public HabilidadAtrabezarPared()
+    public HabilidadAtravesarPared()
     {
-        Nombre = "Atrabezar Pared";
+        Nombre = "Atravesar Pared";
         TiempoEnfriamiento=5;
     }
 

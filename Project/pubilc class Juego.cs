@@ -63,7 +63,7 @@ public class Juego
         }
 
             string[] explicacion = new string[5];
-            explicacion[0] = @"Bienvenido a Meow Mania: The Great Fish Chase, un emocionante juego de laberinto para dos jugadores donde tú y tu oponente 
+            explicacion[0] = @"Bienvenido a Meow Mania: The Great Fish Chase, un juego de laberinto para dos jugadores donde tú y tu oponente 
 asumirán el papel de adorables gatos en busca de deliciosos pescados. El objetivo es simple: recolectar la mayor cantidad de pescados posible antes de que se agoten.";
                 
             explicacion[1] = @"Selección de Fichas:
@@ -88,8 +88,7 @@ asumirán el papel de adorables gatos en busca de deliciosos pescados. El objeti
             en tu próximo turno.";
 
             explicacion[4] = @"Final del Juego:
-            El juego continúa hasta que no queden más pescados en el laberinto. 
-            El jugador con más puntos será coronado como el rey o reina del laberinto";
+            El juego continúa hasta que no queden más pescados en el laberinto.";
 
             int index = 0;
 
@@ -113,7 +112,7 @@ asumirán el papel de adorables gatos en busca de deliciosos pescados. El objeti
             new Fichas("Ficha 1", new HabilidadDuplicarPuntos(), 20),
             new Fichas("Ficha 2", new HabilidadSuperVelocidad(), 20),
             new Fichas("Ficha 3", new HabilidadTeletransportacion(), 20),
-            new Fichas("Ficha 4", new HabilidadAtrabezarPared(), 20),
+            new Fichas("Ficha 4", new HabilidadAtravesarPared(), 20),
             new Fichas("Ficha 5", new HabilidadInmunidad(), 20),
         };
 
@@ -167,7 +166,7 @@ public Fichas ElegirFicha(Jugador jugador)
          int i=0;
         while (true)
         {   
-            for (int j = 0; j < jugadores[i%2].FichaElegida.Velocidad; j++)
+            for (int j = 0; j < jugadores[i%2].FichaElegida.VelocidadOriginal; j++)
             {
                 
                 laberinto.DibujarEnBuffer(ScreenBuffer);
@@ -176,12 +175,13 @@ public Fichas ElegirFicha(Jugador jugador)
                 Movimiento(jugadores[i%2]);
             }
                jugadores[i%2].FichaElegida.ActualizarEnfriamiento();
+               RestablecerVelocidad(jugadores[i%2]);
             
              if (jugadores[i%2].FichaElegida.Habilidad is HabilidadSuperVelocidad habilidadSuperVelocidad)
             {
                 if (habilidadSuperVelocidad.TurnosRestantes==jugadores[i%2].FichaElegida.Habilidad.TiempoEnfriamiento-1)
                 {
-                    habilidadSuperVelocidad.RestablecerVelocidad(jugadores[i%2]);
+                    habilidadSuperVelocidad.RestablecerVelocidadHabilidad(jugadores[i%2]);
                 }
                 
             }
@@ -211,7 +211,7 @@ public Fichas ElegirFicha(Jugador jugador)
             ██╔══╝░░██║╚██╔╝██║██╔═══╝░██╔══██║░░░██║░░░██╔══╝░░  
             ███████╗██║░╚═╝░██║██║░░░░░██║░░██║░░░██║░░░███████╗  
             ╚══════╝╚═╝░░░░░╚═╝╚═╝░░░░░╚═╝░░╚═╝░░░╚═╝░░░╚══════╝  
-            ";//genrarlo
+            ";
         }
         else if (jugadores[0].Puntuacion>jugadores[1].Puntuacion)
         {
@@ -323,7 +323,7 @@ public Fichas ElegirFicha(Jugador jugador)
          int dify=newPositionY-jugador.PositionY;
 
         if (laberinto.tablero[newPositionX, newPositionY].Tipo==Celda.TipoCelda.Pared &&
-            jugador.FichaElegida.Habilidad is HabilidadAtrabezarPared &&
+            jugador.FichaElegida.Habilidad is HabilidadAtravesarPared &&
             jugador.FichaElegida.Habilidad.TurnosRestantes == jugador.FichaElegida.Habilidad.TiempoEnfriamiento &&
             EsMovimientoValido(newPositionX+difx, newPositionY+dify))
         {
@@ -337,6 +337,7 @@ public Fichas ElegirFicha(Jugador jugador)
 
             laberinto.tablero[jugador.PositionX,jugador.PositionY].HayJugador = true;
             laberinto.tablero[jugador.PositionX,jugador.PositionY].jugador = jugador;
+             jugador.FichaElegida.Velocidad--;
 
 
         }
@@ -351,6 +352,7 @@ public Fichas ElegirFicha(Jugador jugador)
 
             laberinto.tablero[jugador.PositionX,jugador.PositionY].HayJugador = true;
             laberinto.tablero[jugador.PositionX,jugador.PositionY].jugador = jugador;
+            jugador.FichaElegida.Velocidad--;
         }
         else Movimiento(jugador);
 
@@ -421,6 +423,11 @@ public Fichas ElegirFicha(Jugador jugador)
         }
 
         return false;
+    }
+
+      public void RestablecerVelocidad(Jugador jugador)
+    {
+        jugador.FichaElegida.Velocidad = jugador.FichaElegida.VelocidadOriginal; 
     }
 
 }
