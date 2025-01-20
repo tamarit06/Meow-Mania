@@ -1,5 +1,4 @@
-﻿  using System; 
-  using Spectre.Console;
+﻿  using System;
     class Program
    {
     static void Main(string[] args) 

@@ -70,7 +70,13 @@ asumirán el papel de adorables gatos en busca de deliciosos pescados. El objeti
             Antes de comenzar, cada jugador debe elegir una de las cinco fichas disponibles.
             Cada ficha tiene características únicas que influirán en tu estilo de juego:
                -Velocidad: Indica cuántas casillas puedes moverte en cada turno.
-               -Habilidad Especial: Cada ficha cuenta con una habilidad única que puede ayudarte a avanzar.
+               -Habilidad Especial: Cada ficha cuenta con una habilidad única que puede ayudarte a avanzar:
+                    1. Duplicar Puntos: permite al jugador duplicar el valor de cada pez.
+                    2. Supervelocidad: el jugador puede moverse el doble de la distancia habitual.
+                    3. Atravesar Pared: permite al jugador atravesar cualquier pared del laberinto.
+                    4. Inmunidad a Trampa: el jugador es inmune a cualquier trampa que pueda encontrar.
+                    5. Teletransportación: La teletransportación permite al jugador moverse a un lugar 
+                    aleatorio dentro del laberinto.
                -Tiempo de Enfriamiento: Después de usar tu habilidad, deberás esperar un número determinado 
                 de turnos antes de poder utilizarla nuevamente.";
 

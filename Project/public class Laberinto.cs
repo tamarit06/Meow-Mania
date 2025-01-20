@@ -78,7 +78,7 @@ public class Laberinto
         {
             for (int j = 0; j < sizeY; j++)
             {
-                if (tablero[i, j].Tipo == Celda.TipoCelda.Camino && i!=1 && j!=1 && i!=25 && j!=25)
+                if (tablero[i, j].Tipo == Celda.TipoCelda.Camino && i>2 && j>2 && i<22 && j<22)
                 {
                     posicionesCamino.Add((i, j));
                 }

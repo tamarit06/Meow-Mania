@@ -26,18 +26,19 @@ public class Jugador
     {
     // Crear una tabla para mostrar las características
     var tabla = new Table();
-    tabla.AddColumn("[blue]Jugador[/]");
-    tabla.AddColumn("[yellow]Puntuación[/]");
-    tabla.AddColumn("[green]Tiempo de enfriamiento[/]");
-    tabla.AddColumn("[red]Velocidad[/]");
-    tabla.AddColumn("[yellow]Habilidad[/]");
+    tabla.Border=TableBorder.Double;
+    tabla.AddColumn("[salmon1]Jugador[/]");
+    tabla.AddColumn("[salmon1]Puntuación[/]");
+    tabla.AddColumn("[salmon1]Tiempo de enfriamiento[/]");
+    tabla.AddColumn("[salmon1]Velocidad[/]");
+    tabla.AddColumn("[salmon1]Habilidad[/]");
 
         tabla.AddRow(
-            $"[blue]{jugador.Nombre}[/]",
-            $"[yellow]{jugador.Puntuacion}[/]", 
-            $"[green]{jugador.FichaElegida.Habilidad.TurnosRestantes}[/]",
-            $"[red]{jugador.FichaElegida.Velocidad}[/]",
-            $"[yellow]{jugador.FichaElegida.Habilidad.Nombre}[/]"    
+            $"[skyblue3]{jugador.Nombre}[/]",
+            $"[skyblue3]{jugador.Puntuacion}[/]", 
+            $"[skyblue3]{jugador.FichaElegida.Habilidad.TurnosRestantes}[/]",
+            $"[skyblue3]{jugador.FichaElegida.Velocidad}[/]",
+            $"[skyblue3]{jugador.FichaElegida.Habilidad.Nombre}[/]"    
         );
     
 
@@ -47,7 +48,10 @@ public class Jugador
 
     public void QuitarPunto()
     {
-        Puntuacion--;
+        if (Puntuacion>0)
+        {
+             Puntuacion--;
+        }
 
     }
 
