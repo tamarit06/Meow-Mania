@@ -99,7 +99,7 @@ public class HabilidadTeletransportacion : Habilidad
     List<(int x,int y)> posicionesCamino;
     public HabilidadTeletransportacion()
     {
-        Nombre = "Teletransportación Total";
+        Nombre = "Teletransportación";
         TiempoEnfriamiento=3;
     }
 

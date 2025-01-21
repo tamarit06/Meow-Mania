@@ -81,7 +81,7 @@ asumirán el papel de adorables gatos en busca de deliciosos pescados. El objeti
                 de turnos antes de poder utilizarla nuevamente.";
 
             explicacion[2] = @"Recolección de Pescados:
-            A medida que te mueves por el laberinto, encontrarás pescados esparcidos por el terreno. 
+            A medida que te mueves por el laberinto, por las teclas W(arriba), S(abajo), D(derecha), A(izquierda) encontrarás pescados esparcidos por el terreno. 
             Cada pescado que recojas te otorgará puntos.";
 
             explicacion[3] = @" Trampas:

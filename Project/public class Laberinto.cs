@@ -143,19 +143,19 @@ public class Laberinto
                 
                 if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 1 && tablero[i,j].Tipo!=Celda.TipoCelda.Pared)
                 {
-                    contenido = "[blue]😾[/]";
+                    contenido = "😾";
                 }
                 else if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 2 && tablero[i,j].Tipo!=Celda.TipoCelda.Pared)
                 {
-                    contenido = "[blue]😼[/]";
+                    contenido = "😼";
                 }
                 else if (tablero[i, j].Tipo == Celda.TipoCelda.Camino)
                 {
-                    contenido = "[green]  [/]";
+                    contenido = "  ";
                 }
                 else if (tablero[i,j].Tipo == Celda.TipoCelda.Pared)
                 {
-                    contenido = "[green]🧱[/]";
+                    contenido = "🧱";
                 }
                 else if (tablero[i, j].Tipo == Celda.TipoCelda.Trampa)
                 {
