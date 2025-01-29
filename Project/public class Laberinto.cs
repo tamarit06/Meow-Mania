@@ -74,11 +74,11 @@ public class Laberinto
     {
         List<(int x, int y)> posicionesCamino = new List<(int x, int y)>();
 
-        for (int i = 0; i < sizeX; i++)
+        for (int i = 3; i < 22; i++)
         {
-            for (int j = 0; j < sizeY; j++)
+            for (int j = 3; j < 22; j++)
             {
-                if (tablero[i, j].Tipo == Celda.TipoCelda.Camino && i>2 && j>2 && i<22 && j<22)
+                if (tablero[i, j].Tipo == Celda.TipoCelda.Camino)
                 {
                     posicionesCamino.Add((i, j));
                 }
@@ -141,11 +141,11 @@ public class Laberinto
             {
                 string contenido = " ";
                 
-                if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 1 && tablero[i,j].Tipo!=Celda.TipoCelda.Pared)
+                if(tablero[i,j].HayJugador && tablero[i,j].jugador.identificador == 1 && tablero[i,j].Tipo!=Celda.TipoCelda.Pared)
                 {
                     contenido = "😾";
                 }
-                else if(tablero[i,j].HayJugador && tablero[i,j].jugador.representacionEnConsola == 2 && tablero[i,j].Tipo!=Celda.TipoCelda.Pared)
+                else if(tablero[i,j].HayJugador && tablero[i,j].jugador.identificador == 2 && tablero[i,j].Tipo!=Celda.TipoCelda.Pared)
                 {
                     contenido = "😼";
                 }

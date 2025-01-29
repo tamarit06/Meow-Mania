@@ -7,23 +7,14 @@ public class Juego
     public List<Fichas> fichas { get; set; }
     public List<Jugador> jugadores { get; set; }
     private Laberinto laberinto;
-    private ScreenBuffer ScreenBuffer; // Buffer de pantalla
-
-     // Definición de frecuencias para algunas notas
-        int C4 = 261; // Do
-        int D4 = 294; // Re
-        int E4 = 329; // Mi
-        int F4 = 349; // Fa
-        int G4 = 392; // Sol
-        int A4 = 440; // La
-        int B4 = 493; // Si
+    private ScreenBuffer ScreenBuffer; 
 
     public Juego()
     {
         ScreenBuffer = new ScreenBuffer(25, 25);
         Console.Clear();
     
-         Console.CursorVisible=false;
+        Console.CursorVisible=false;
           string message = @"
                 ███╗   ███╗███████╗ ██████╗ ██╗    ██╗    ███╗   ███╗ █████╗ ███╗   ██╗██╗ █████╗ 
                 ████╗ ████║██╔════╝██╔═══██╗██║    ██║    ████╗ ████║██╔══██╗████╗  ██║██║██╔══██╗
@@ -51,7 +42,6 @@ public class Juego
         // Repetir la melodía 2 veces
         for (int i = 0; i < 2; i++)
         {
-            // Melodía simple
             Console.Beep(659, 200); // Mi
             Console.Beep(659, 200); // Mi
             Console.Beep(659, 200); // Mi
@@ -70,13 +60,13 @@ asumirán el papel de adorables gatos en busca de deliciosos pescados. El objeti
             Antes de comenzar, cada jugador debe elegir una de las cinco fichas disponibles.
             Cada ficha tiene características únicas que influirán en tu estilo de juego:
                -Velocidad: Indica cuántas casillas puedes moverte en cada turno.
-               -Habilidad Especial: Cada ficha cuenta con una habilidad única que puede ayudarte a avanzar:
+               -Habilidad Especial: Cada ficha cuenta con una habilidad única que estará vigente durante un turno:
                     1. Duplicar Puntos: permite al jugador duplicar el valor de cada pez.
-                    2. Supervelocidad: el jugador puede moverse el doble de la distancia habitual.
+                    2. Supervelocidad: el jugador puede moverse 10 casillas más de lo habitual.
                     3. Atravesar Pared: permite al jugador atravesar cualquier pared del laberinto.
                     4. Inmunidad a Trampa: el jugador es inmune a cualquier trampa que pueda encontrar.
                     5. Teletransportación: La teletransportación permite al jugador moverse a un lugar 
-                    aleatorio dentro del laberinto.
+                    aleatorio dentro del laberinto una sola vez en ese turno.
                -Tiempo de Enfriamiento: Después de usar tu habilidad, deberás esperar un número determinado 
                 de turnos antes de poder utilizarla nuevamente.";
 
@@ -105,8 +95,9 @@ asumirán el papel de adorables gatos en busca de deliciosos pescados. El objeti
                 .Border(BoxBorder.Double)
                 .BorderStyle(new Style(Color.SkyBlue1));
                  AnsiConsole.Write(panel);
+                 Console.WriteLine("Presione cualquier tecla para continuar");
                 Console.ReadKey();
-                index = index + 1;
+                index = index+1;
             }
 
         jugadores = new List<Jugador>();
@@ -144,14 +135,15 @@ public Fichas ElegirFicha(Jugador jugador)
     // Lista de fichas disponibles
     int fichasDisponibles = fichas.Count;
     var highlightStyle = new Style().Foreground(Color.SkyBlue1);
-    // Crear una lista de opciones para el menú
+
+    // Lista de opciones para el menú
     var opciones = new List<string>();
     for (int i = 0; i < fichas.Count; i++)
     {
         opciones.Add($"{i + 1}. {fichas[i].Nombre} (Habilidad: {fichas[i].Habilidad.Nombre}, Velocidad: {fichas[i].Velocidad}, Tiempo de enfriamiento: {fichas[i].Habilidad.TiempoEnfriamiento})");
     }
 
-    // Mostrar el menú y permitir al usuario seleccionar una opción
+    // Mostrar el menú
     var seleccion = AnsiConsole.Prompt(
         new SelectionPrompt<string>()
             .Title("[SkyBlue1]Por favor, elige una ficha:[/]")
@@ -178,11 +170,14 @@ public Fichas ElegirFicha(Jugador jugador)
                 laberinto.DibujarEnBuffer(ScreenBuffer);
                 ScreenBuffer.Render();
                 jugadores[0].MostrarCaracteristicasJugadores(jugadores[i%2]);
-                Movimiento(jugadores[i%2]);
+                Movimiento(jugadores[i%2], ref j);
             }
                jugadores[i%2].FichaElegida.ActualizarEnfriamiento();
+              
                RestablecerVelocidad(jugadores[i%2]);
-            
+           
+               jugadores[i%2].FichaElegida.Habilidad.Activo=false; //desactivar la habilidad
+
              if (jugadores[i%2].FichaElegida.Habilidad is HabilidadSuperVelocidad habilidadSuperVelocidad)
             {
                 if (habilidadSuperVelocidad.TurnosRestantes==jugadores[i%2].FichaElegida.Habilidad.TiempoEnfriamiento-1)
@@ -270,8 +265,6 @@ public Fichas ElegirFicha(Jugador jugador)
             ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝     ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═════╝  ╚═════╝                     
             ";
         }
-
-        mensajeVictoria= mensajeVictoria ;
         Console.Clear();
         
             AnsiConsole.Markup($"[bold green]{mensajeVictoria}[/]");
@@ -291,13 +284,14 @@ public Fichas ElegirFicha(Jugador jugador)
         Console.Beep(C4, 200); // Do
     }
 
-    public void Movimiento(Jugador jugador)
+    public void Movimiento(Jugador jugador,ref int j )
     {
         ConsoleKeyInfo keyInfo = Console.ReadKey(true);
 
         if (keyInfo.Key == ConsoleKey.H && jugador.FichaElegida.Habilidad.PuedeActivar()) // Activar habilidad
     {
         jugador.FichaElegida.Habilidad.Activar(jugador, laberinto);
+        j--; //para que la activacion de la habilidad no sea un movimiento
         return; //salir del  metodo luego de activar la habilidad
     }
 
@@ -325,12 +319,13 @@ public Fichas ElegirFicha(Jugador jugador)
             default:
             return;
         }
-         int difx=newPositionX-jugador.PositionX;
+         int difx=newPositionX-jugador.PositionX; 
          int dify=newPositionY-jugador.PositionY;
 
+        //Atravesar pared
         if (laberinto.tablero[newPositionX, newPositionY].Tipo==Celda.TipoCelda.Pared &&
             jugador.FichaElegida.Habilidad is HabilidadAtravesarPared &&
-            jugador.FichaElegida.Habilidad.TurnosRestantes == jugador.FichaElegida.Habilidad.TiempoEnfriamiento &&
+            jugador.FichaElegida.Habilidad.Activo &&  //boleanos
             EsMovimientoValido(newPositionX+difx, newPositionY+dify))
         {
            
@@ -339,7 +334,7 @@ public Fichas ElegirFicha(Jugador jugador)
             laberinto.tablero[jugador.PositionX,jugador.PositionY].jugador = null;
 
             jugador.PositionX=newPositionX+difx;
-            jugador.PositionY=newPositionY+dify;
+            jugador.PositionY=newPositionY+dify; //moverse a la posicion  despues de la pared
 
             laberinto.tablero[jugador.PositionX,jugador.PositionY].HayJugador = true;
             laberinto.tablero[jugador.PositionX,jugador.PositionY].jugador = jugador;
@@ -360,7 +355,7 @@ public Fichas ElegirFicha(Jugador jugador)
             laberinto.tablero[jugador.PositionX,jugador.PositionY].jugador = jugador;
             jugador.FichaElegida.Velocidad--;
         }
-        else Movimiento(jugador);
+        else Movimiento(jugador,ref j);
 
         if (laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Trampa &&
             !jugador.FichaElegida.EsInmune)
@@ -371,7 +366,7 @@ public Fichas ElegirFicha(Jugador jugador)
         }
 
         if (laberinto.tablero[jugador.PositionX, jugador.PositionY].Tipo==Celda.TipoCelda.Pescado&&
-        jugador.FichaElegida.Habilidad is HabilidadDuplicarPuntos && jugador.FichaElegida.Habilidad.TurnosRestantes==jugador.FichaElegida.Habilidad.TiempoEnfriamiento)
+        jugador.FichaElegida.Habilidad is HabilidadDuplicarPuntos && jugador.FichaElegida.Habilidad.Activo)
         {
             laberinto.tablero[jugador.PositionX, jugador.PositionY].ConvertirEnCamino();
             jugador.Puntuacion+=2;
@@ -435,5 +430,14 @@ public Fichas ElegirFicha(Jugador jugador)
     {
         jugador.FichaElegida.Velocidad = jugador.FichaElegida.VelocidadOriginal; 
     }
+
+    // Definición de frecuencias 
+        int C4 = 261; // Do
+        int D4 = 294; // Re
+        int E4 = 329; // Mi
+        int F4 = 349; // Fa
+        int G4 = 392; // Sol
+        int A4 = 440; // La
+        int B4 = 493; // Si
 
 }

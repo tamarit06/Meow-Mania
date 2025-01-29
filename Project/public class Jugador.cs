@@ -8,13 +8,13 @@ public class Jugador
     public int PositionX;
     public int PositionY;
     private Laberinto laberinto;
-    public int representacionEnConsola { get; set; }
+    public int identificador { get; set; }  //jugador 1 o 2
     public int Puntuacion{get; set;}
     
-    public Jugador(string Nombre, int representacionEnConsola, int PositionX, int PositionY, Laberinto laberinto)
+    public Jugador(string Nombre, int identificador, int PositionX, int PositionY, Laberinto laberinto)
     {
         this.Nombre=Nombre;
-        this.representacionEnConsola=representacionEnConsola;
+        this.identificador=identificador;
         this.PositionX=PositionX;
         this.PositionY=PositionY;
         this.laberinto=laberinto;
@@ -24,7 +24,6 @@ public class Jugador
 
     public void MostrarCaracteristicasJugadores(Jugador jugador)
     {
-    // Crear una tabla para mostrar las características
     var tabla = new Table();
     tabla.Border=TableBorder.Double;
     tabla.AddColumn("[salmon1]Jugador[/]");
@@ -41,34 +40,6 @@ public class Jugador
             $"[skyblue3]{jugador.FichaElegida.Habilidad.Nombre}[/]"    
         );
     
-
-    // Mostrar la tabla en la consola
-    AnsiConsole.Render(tabla);
-    }
-
-    public void QuitarPunto()
-    {
-        if (Puntuacion>0)
-        {
-             Puntuacion--;
-        }
-
-    }
-
-    public void DisminuirVelocidad()
-    {
-       FichaElegida.Velocidad--;
-    }
-    public bool EsCeldaValida(int celdaX, int celdaY)
-{
-    if (celdaX < 0 || celdaX >= laberinto.sizeX-1 || celdaY < 0 || celdaY >= laberinto.sizeY-1)
-    {
-        return false; //La celda está fuera de los límites del laberinto
-    }
-    if (laberinto.Tablero[celdaX, celdaY].Tipo==Celda.TipoCelda.Pared)//aqui falta algo
-    {
-        return false; //La celda es una pared
-    }
-    return true; //La celda es válida
+        AnsiConsole.Render(tabla);
     }
 }

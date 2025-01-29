@@ -3,10 +3,12 @@ public abstract class Habilidad
     public string Nombre { get; set; }
     public int TiempoEnfriamiento { get; set; } // Tiempo de enfriamiento en turnos
     public int TurnosRestantes { get; set; }
+    public bool Activo;
      
     public Habilidad()
     {
         TurnosRestantes=0;
+        Activo=false;
     }
     public abstract void Activar(Jugador jugador, Laberinto laberinto);
 
@@ -36,6 +38,7 @@ public class HabilidadDuplicarPuntos : Habilidad
     {
        if (PuedeActivar())
         {
+            Activo=true;
             TurnosRestantes = TiempoEnfriamiento; // Reiniciar el tiempo de enfriamiento
         }
     }
@@ -43,20 +46,20 @@ public class HabilidadDuplicarPuntos : Habilidad
 
 public class HabilidadSuperVelocidad : Habilidad
 {
-    int velORIG;
+    int original;
 
     public HabilidadSuperVelocidad()
     {
         Nombre = "Supervelocidad";
-        TiempoEnfriamiento=4;
+        TiempoEnfriamiento=1;
     }
 
     public override void Activar(Jugador jugador, Laberinto laberinto)
     {
-        velORIG=jugador.FichaElegida.VelocidadOriginal;
+        original=jugador.FichaElegida.VelocidadOriginal;
         if (PuedeActivar())
         {
-            jugador.FichaElegida.VelocidadOriginal+=10;
+            jugador.FichaElegida.VelocidadOriginal+=11;
             jugador.FichaElegida.Velocidad+=10;
             TurnosRestantes = TiempoEnfriamiento; // Reiniciar el tiempo de enfriamiento
         }
@@ -65,8 +68,8 @@ public class HabilidadSuperVelocidad : Habilidad
 
      public void RestablecerVelocidadHabilidad(Jugador jugador)
     {
-        jugador.FichaElegida.VelocidadOriginal = velORIG; 
-        jugador.FichaElegida.Velocidad=velORIG;
+        jugador.FichaElegida.VelocidadOriginal = original; 
+        jugador.FichaElegida.Velocidad=original;
     }
 }
 
@@ -136,7 +139,7 @@ public class HabilidadAtravesarPared : Habilidad
     {
        if (PuedeActivar())
        {
-        
+        Activo=true;
         TurnosRestantes = TiempoEnfriamiento; // Reiniciar el tiempo de enfriamiento
        }
 

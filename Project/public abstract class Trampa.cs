@@ -8,7 +8,10 @@ public class TrampaQuitarPunto : Trampa
 
     public override void Activar(Jugador jugador)
     {
-        jugador.QuitarPunto();
+        if (jugador.Puntuacion>0)
+        {
+             jugador.Puntuacion--;
+        }
     }
 }
 
@@ -24,6 +27,7 @@ public class TrampaDisminuirVelocidad : Trampa
 {
     public override void Activar(Jugador jugador)
     {
-        jugador.DisminuirVelocidad();
+         jugador.FichaElegida.Velocidad--;
+         jugador.FichaElegida.VelocidadOriginal--;
     }
 }
