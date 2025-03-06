@@ -16,7 +16,7 @@ public class Laberinto
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         InicializarTablero();
-        GenerarLaberintoConPrim();
+        GenerarLaberinto();
         AgregarTrampas(12);
         AgregarPescado(24);
     }
@@ -33,7 +33,7 @@ public class Laberinto
         }
     }
 
-    private void GenerarLaberintoConPrim()
+    private void GenerarLaberinto()
     {
         List<(int, int)> celdasAbiertas = new List<(int, int)>();
         int[] dx = { -1, 1, 0, 0 };  
@@ -102,7 +102,7 @@ public class Laberinto
             switch (tipoTrampa)
             {
                 case 1:
-                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaQuitarPunto()); // Devolver 5 celdas
+                    tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaQuitarPunto());
                     break;
                 case 2:
                     tablero[posicionTrampa.x, posicionTrampa.y].AsignarTrampa(new TrampaDisminuirVelocidad());
