@@ -1,8 +1,4 @@
 # 🏆 Meow Mania
-
-
-![projec](https://github.com/user-attachments/assets/7feb08ff-1f43-4c52-b874-dbe66adda428)
-
 ¡Bienvenido a **Meow Mania**! Un juego de laberintos por turnos donde dos jugadores compiten para recolectar pescados y esquivar trampas. 🐟⚡
 
 ---
@@ -44,22 +40,13 @@ dotnet run
 
 ✅ **Jugabilidad estratégica** con habilidades únicas y trampas fijas en el mapa.  
 
-✅ **Pantalla dividida en consola** para visualizar a ambos jugadores.  
-
 ✅ **Diseñado en C#** con Programación Orientada a Objetos.  
 
 ✅ **Sistema de turnos balanceado** para mayor competencia.  
 
----
+## 🐈 **Captura de pantalla**
+<img width="296" alt="laberinto" src="https://github.com/user-attachments/assets/ef6ee456-251e-4fa4-87d3-0921f86ce0a0" />
 
-## 🚀 **Roadmap de Mejoras**
-🔹 **Modo un jugador** con inteligencia artificial básica.  
-
-🔹 **Más habilidades y trampas** para mayor variedad.  
-
-🔹 **Mejor representación visual en consola**.  
-
----
 
 ## 🤝 **Contribuciones**
 ¿Tienes ideas para mejorar *Meow Mania*? ¡Siéntete libre de hacer un fork y contribuir al proyecto! 🚀
